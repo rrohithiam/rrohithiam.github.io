@@ -23,7 +23,7 @@ repository               : "rrohithiam/rrohithiam.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "spidey.png"
+  avatar           : "bio-photo.jpg"
   name             : "Rohith Ramanan"
   pronouns         : # example: "she/her"  
   bio              : "Your Friendly Neighborhood Web Slinger"
@@ -57,7 +57,7 @@ author:
 
   # Social media
   artstation       : # Username
-  bluesky          : "bsky.app" # Replace this with you Bluesky username
+  bluesky          : # "bsky.app" # Replace this with you Bluesky username
   facebook         : # Username
   flickr           : # Username
   foursquare       : # Username
