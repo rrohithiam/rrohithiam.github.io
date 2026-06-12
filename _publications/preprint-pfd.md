@@ -22,10 +22,10 @@ citation: #''
       Probability-Flow Distillation presents a method for high-fidelity 3D generation using exact Wasserstein gradient flows.
     </p>
     
-    <p style="margin: 12px 0 0 0; font-size: 14px;">
+    <p style="margin: 12px 0 0 0; font-size: 14px; position: relative;">
       <a href="https://doi.org/10.48550/arXiv.2605.09071" style="text-decoration: none; color: #0066cc; font-weight: 500;">arXiv</a> | 
-      <a href="#" style="text-decoration: none; color: #0066cc; font-weight: 500; position: relative; cursor: pointer;" class="bibtex-link" onclick="event.preventDefault(); toggleBibtex(event);">bibtex</a>
-      <div id="bibtex-tooltip" style="display: none; position: absolute; bottom: 135%; left: 0; background-color: #fafafa; color: #333; padding: 15px; border-radius: 6px; border: 1px solid #e0e0e0; font-size: 12px; font-family: 'Courier New', monospace; white-space: pre-wrap; word-wrap: break-word; width: 420px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 350px; overflow-y: auto; background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);">@misc{rrohitithpfd2026,
+      <a href="#" style="text-decoration: none; color: #0066cc; font-weight: 500; cursor: pointer;" class="bibtex-link" onclick="event.preventDefault(); toggleBibtex();">bibtex</a>
+      <div id="bibtex-tooltip" style="display: none; position: absolute; top: 25px; left: 0; background-color: #fafafa; color: #333; padding: 15px; border-radius: 6px; border: 1px solid #e0e0e0; font-size: 12px; font-family: 'Courier New', monospace; white-space: pre-wrap; word-wrap: break-word; width: 420px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 350px; overflow-y: auto; background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);">@misc{rrohitithpfd2026,
       title={Probability-Flow Distillation: Exact Wasserstein Gradient Flow for High-Fidelity 3D Generation}, 
       author={Rohith Ramanan and A. N. Rajagopalan},
       year={2026},
@@ -36,14 +36,15 @@ citation: #''
 }</div>
     </p>
     <script>
-      function toggleBibtex(e) {
+      function toggleBibtex() {
         const tooltip = document.getElementById('bibtex-tooltip');
-        if (tooltip.style.display === 'none') {
-          tooltip.style.display = 'block';
-          document.addEventListener('click', closeBibtexOnClickOutside);
-        } else {
-          tooltip.style.display = 'none';
-          document.removeEventListener('click', closeBibtexOnClickOutside);
+        const isHidden = tooltip.style.display === 'none';
+        tooltip.style.display = isHidden ? 'block' : 'none';
+        
+        if (isHidden) {
+          setTimeout(() => {
+            document.addEventListener('click', closeBibtexOnClickOutside);
+          }, 10);
         }
       }
       
