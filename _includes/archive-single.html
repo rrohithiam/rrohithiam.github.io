@@ -27,8 +27,8 @@
     {% endif %}
 
     {% if post.collection == 'publications' %}
-      <h2 class="archive__item-title" itemprop="headline" style="font-size: 1.1em; margin: 8px 0;">
-        {{ title }}
+      <h2 class="archive__item-title" itemprop="headline" style="font-size: 1em; margin: 8px 0; cursor: default;">
+        <span style="text-decoration: none;">{{ title }}</span>
       </h2>
     {% else %}
       <h2 class="archive__item-title" itemprop="headline">
