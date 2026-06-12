@@ -14,6 +14,9 @@ main:
   - title: "Blog"
     url: /year-archive/
     
+  - title: "Misc."
+    url: /misc/
+    
   - title: "CV"
     url: /cv/
     
