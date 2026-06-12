@@ -10,19 +10,22 @@ paperurl: 'https://doi.org/10.48550/arXiv.2605.09071'
 citation: #''
 ---
 
-<div style="display: flex; gap: 20px; align-items: flex-start; font-size: 14px;">
+<div style="display: flex; gap: 30px; align-items: flex-start;">
   <div style="flex: 1;">
-    <p style="margin: 0; font-size: 13px; line-height: 1.4;">
+    <h3 style="margin: 0 0 12px 0; font-size: 18px; font-weight: 600;">
+      Probability-Flow Distillation: Exact Wasserstein Gradient Flow for High-Fidelity 3D Generation
+    </h3>
+    
+    <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #333;">
       Probability-Flow Distillation presents a method for high-fidelity 3D generation using exact Wasserstein gradient flows.
     </p>
     
-    <p style="margin: 8px 0 0 0; font-size: 12px;">
-      <a href="https://doi.org/10.48550/arXiv.2605.09071" style="text-decoration: none; color: #0066cc;">arXiv</a> / 
-      <a href="https://doi.org/10.48550/arXiv.2605.09071" style="text-decoration: none; color: #0066cc;">pdf</a>
+    <p style="margin: 12px 0 0 0; font-size: 14px;">
+      <a href="https://doi.org/10.48550/arXiv.2605.09071" style="text-decoration: none; color: #0066cc; font-weight: 500;">arXiv</a>
     </p>
   </div>
   
   <div style="flex: 0 0 auto;">
-    <img src="/images/teaser.pdf" alt="teaser" style="width: 200px; height: auto; border-radius: 4px;">
+    <img src="{{ site.baseurl }}/images/teaser.png" alt="teaser" style="width: 180px; height: auto; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
   </div>
 </div>
