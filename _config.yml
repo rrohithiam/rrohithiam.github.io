@@ -23,10 +23,10 @@ repository               : "rrohithiam/rrohithiam.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "spidey.jpg"
+  avatar           : "profile.png"
   name             : "ரோஹித் இரமணன்<br>(Rohith Ramanan)"
   pronouns         : # example: "she/her"  
-  bio              : "Your Friendly Neighborhood Web Slinger"
+  bio              : "r"
   location         : "Chennai, India"
   employer         : "Indian Institute of Technology Madras"
   uri              : # URL
