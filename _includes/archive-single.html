@@ -42,7 +42,7 @@
         {% endif %}
       </h2>
     {% endif %}
-    
+
     {% if post.read_time %}
       <p class="page__meta"><i class="fa fa-clock" aria-hidden="true"></i> {% include read-time.html %}</p>
     {% endif %}
@@ -59,22 +59,22 @@
     {% elsif post.excerpt and site.read_more == 'enabled' %}
       <p class="archive__item-excerpt" itemprop="description"><p>{{ post.excerpt | markdownify | remove: '<p>' | remove: '</p>' }}<strong><a href="{{ base_path }}{{ post.url }}" rel="permalink"> Read more</a></strong></p></p>
     {% endif %}
-    
+
     {% if post.collection == 'publications' and post.paperurl %}
-      <div style="margin: 12px 0 0 0; font-size: 14px; position: relative;">
+      <div style="margin: 12px 0 0 0; font-size: 14px; position: relative; display: inline-block;">
         {% if post.paperurl contains 'arxiv' %}
           <a href="{{ post.paperurl }}" style="text-decoration: none; color: #0066cc; font-weight: 500;">arXiv</a>
         {% else %}
           <a href="{{ post.paperurl }}" style="text-decoration: none; color: #0066cc; font-weight: 500;">Paper</a>
         {% endif %}
-        
+
         {% if post.bibtex %}
           | <a href="#" style="text-decoration: none; color: #0066cc; font-weight: 500; cursor: pointer;"
                class="bibtex-toggle"
                data-bibtex-id="bibtex-{{ post.title | slugify }}"
                onclick="event.preventDefault(); toggleBibtex(this);">bibtex</a>
           <div id="bibtex-{{ post.title | slugify }}" class="bibtex-box"
-               style="display: none; position: absolute; top: 100%; left: 0; margin-top: 8px;
+               style="display: none; position: absolute; bottom: 100%; left: 0; margin-bottom: 8px;
                       background-color: #fafafa; color: #333; padding: 15px; border-radius: 6px;
                       border: 1px solid #e0e0e0; font-size: 12px; font-family: 'Courier New', monospace;
                       white-space: pre-wrap; word-wrap: break-word; width: 420px; z-index: 1000;
@@ -82,7 +82,7 @@
         {% endif %}
       </div>
     {% endif %}
-    
+
     {% if post.citation and post.paperurl and post.slidesurl and post.bibtexurl %}
       <p>Recommended citation: {{ post.citation }}</p>
     {% elsif post.citation and post.paperurl and post.slidesurl %}

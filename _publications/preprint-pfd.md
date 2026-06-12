@@ -22,18 +22,16 @@ bibtex: |
 citation: #''
 ---
 
-<div style="display: flex; gap: 15px; align-items: flex-start;">
+<div style="display: flex; gap: 15px; align-items: flex-start; margin: 0;">
   <div style="flex: 1;">
     <p style="margin: 0 0 12px 0; font-size: 14px; color: #666;">
       <span>{{ page.authors }}</span> <span style="margin: 0 8px;">·</span> <span>{{ page.venue }}</span> <span style="margin: 0 8px;">·</span> <span>{{ page.date | date: '%b %d, %Y' }}</span>
     </p>
-    
     <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #333;">
       Probability-Flow Distillation presents a method for high-fidelity 3D generation using exact Wasserstein gradient flows.
     </p>
   </div>
-  
-  <div style="flex: 0 0 auto;">
-    <img src="{{ site.baseurl }}/images/spidey.jpg" alt="teaser" style="width: 150px; height: 150px; object-fit: cover; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); flex-shrink: 0;">
+  <div style="flex: 0 0 120px;">
+    <img src="{{ site.baseurl }}/images/spidey.jpg" alt="teaser" style="width: 120px; height: 120px; object-fit: cover; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: block;">
   </div>
 </div>
