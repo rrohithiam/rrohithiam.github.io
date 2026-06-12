@@ -1,6 +1,6 @@
 ---
 title: "Quantum computing for molecular vibrational energies: A comprehensive study"
-authors: "Somasundaram R., Jayaharish R., Rohith Ramanan, Chandra Chowdhury"
+authors: "Somasundaram R, Jayaharish R, Rohith Ramanan, Chandra Chowdhury"
 collection: publications
 category: manuscripts
 permalink: /publication/journal-quantum

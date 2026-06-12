@@ -10,15 +10,15 @@
 main:
   - title: "Publications"
     url: /publications/
-        
-  - title: "Blog"
-    url: /year-archive/
-    
-  - title: "Misc."
-    url: /misc/
-    
+
   - title: "Short CV"
     url: /cv/
+
+  - title: "Misc."
+    url: /misc/
+
+  - title: "Blog"
+    url: /year-archive/
     
   # - title: "CV"
   #   url: /cv-json/
