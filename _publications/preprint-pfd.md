@@ -24,7 +24,7 @@ citation: #''
     
     <p style="margin: 12px 0 0 0; font-size: 14px;">
       <a href="https://doi.org/10.48550/arXiv.2605.09071" style="text-decoration: none; color: #0066cc; font-weight: 500;">arXiv</a> | 
-      <a href="https://doi.org/10.48550/arXiv.2605.09071" style="text-decoration: none; color: #0066cc; font-weight: 500;">bibtex</a>
+      <a href="{{ page.bibtexurl }}" style="text-decoration: none; color: #0066cc; font-weight: 500;">bibtex</a>
     </p>
   </div>
   
