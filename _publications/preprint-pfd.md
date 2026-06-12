@@ -12,10 +12,6 @@ citation: #''
 
 <div style="display: flex; gap: 30px; align-items: flex-start;">
   <div style="flex: 1;">
-    <h3 style="margin: 0 0 12px 0; font-size: 18px; font-weight: 600;">
-      Probability-Flow Distillation: Exact Wasserstein Gradient Flow for High-Fidelity 3D Generation
-    </h3>
-    
     <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #333;">
       Probability-Flow Distillation presents a method for high-fidelity 3D generation using exact Wasserstein gradient flows.
     </p>
