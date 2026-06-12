@@ -47,21 +47,21 @@
       <p class="page__meta"><i class="fa fa-clock" aria-hidden="true"></i> {% include read-time.html %}</p>
     {% endif %}
 
-        {% if post.collection == 'teaching' %}
-          <p> {{ post.type }}, <i>{{ post.venue }}</i>, {{ post.date | default: "1900-01-01" | date: "%Y" }} </p>
-        {% elsif post.collection == 'publications' %}
-        {% elsif post.date %}
-         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> {{ site.data.ui-text[site.locale].date_label | default: "Published:" }}</strong> <time datetime="{{ post.date | default: "1900-01-01" | date_to_xmlschema }}">{{ post.date | default: "1900-01-01" | date: "%B %d, %Y" }}</time></p>
-        {% endif %}
+    {% if post.collection == 'teaching' %}
+      <p> {{ post.type }}, <i>{{ post.venue }}</i>, {{ post.date | default: "1900-01-01" | date: "%Y" }} </p>
+    {% elsif post.collection == 'publications' %}
+    {% elsif post.date %}
+      <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> {{ site.data.ui-text[site.locale].date_label | default: "Published:" }}</strong> <time datetime="{{ post.date | default: "1900-01-01" | date_to_xmlschema }}">{{ post.date | default: "1900-01-01" | date: "%B %d, %Y" }}</time></p>
+    {% endif %}
 
     {% if post.excerpt and site.read_more != 'enabled' %}
-    <p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify }}</p>
+      <p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify }}</p>
     {% elsif post.excerpt and site.read_more == 'enabled' %}
-    <p class="archive__item-excerpt" itemprop="description"><p>{{ post.excerpt | markdownify | remove: '<p>' | remove: '</p>' }}<strong><a href="{{ base_path }}{{ post.url }}" rel="permalink"> Read more</a></strong></p></p>
+      <p class="archive__item-excerpt" itemprop="description"><p>{{ post.excerpt | markdownify | remove: '<p>' | remove: '</p>' }}<strong><a href="{{ base_path }}{{ post.url }}" rel="permalink"> Read more</a></strong></p></p>
     {% endif %}
     
     {% if post.collection == 'publications' and post.paperurl %}
-      <p style="margin: 12px 0 0 0; font-size: 14px; position: relative;">
+      <div style="margin: 12px 0 0 0; font-size: 14px; position: relative;">
         {% if post.paperurl contains 'arxiv' %}
           <a href="{{ post.paperurl }}" style="text-decoration: none; color: #0066cc; font-weight: 500;">arXiv</a>
         {% else %}
@@ -69,10 +69,18 @@
         {% endif %}
         
         {% if post.bibtex %}
-          | <a href="#" style="text-decoration: none; color: #0066cc; font-weight: 500; cursor: pointer;" class="bibtex-toggle" data-bibtex-id="bibtex-{{ post.title | slugify }}" onclick="event.preventDefault(); toggleBibtex(this);">bibtex</a>
-          <div id="bibtex-{{ post.title | slugify }}" class="bibtex-box" style="display: none; position: absolute; top: 100%; left: 0; margin-top: 8px; background-color: #fafafa; color: #333; padding: 15px; border-radius: 6px; border: 1px solid #e0e0e0; font-size: 12px; font-family: 'Courier New', monospace; white-space: pre-wrap; word-wrap: break-word; width: 420px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 350px; overflow-y: auto;">{{ post.bibtex }}</div>
+          | <a href="#" style="text-decoration: none; color: #0066cc; font-weight: 500; cursor: pointer;"
+               class="bibtex-toggle"
+               data-bibtex-id="bibtex-{{ post.title | slugify }}"
+               onclick="event.preventDefault(); toggleBibtex(this);">bibtex</a>
+          <div id="bibtex-{{ post.title | slugify }}" class="bibtex-box"
+               style="display: none; position: absolute; top: 100%; left: 0; margin-top: 8px;
+                      background-color: #fafafa; color: #333; padding: 15px; border-radius: 6px;
+                      border: 1px solid #e0e0e0; font-size: 12px; font-family: 'Courier New', monospace;
+                      white-space: pre-wrap; word-wrap: break-word; width: 420px; z-index: 1000;
+                      box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 350px; overflow-y: auto;">{{ post.bibtex }}</div>
         {% endif %}
-      </p>
+      </div>
     {% endif %}
     
     {% if post.citation and post.paperurl and post.slidesurl and post.bibtexurl %}
@@ -101,24 +109,6 @@
 
   </article>
 </div>
-
-<script>
-function toggleBibtex(element) {
-  const bibtexId = element.getAttribute('data-bibtex-id');
-  const bibtexBox = document.getElementById(bibtexId);
-  if (bibtexBox) {
-    bibtexBox.style.display = bibtexBox.style.display === 'none' ? 'block' : 'none';
-  }
-}
-
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.bibtex-toggle') && !e.target.closest('.bibtex-box')) {
-    document.querySelectorAll('.bibtex-box').forEach(box => {
-      box.style.display = 'none';
-    });
-  }
-});
-</script>
 
 <script>
 function toggleBibtex(element) {
