@@ -19,10 +19,10 @@ bibtex: |
 citation: #''
 ---
 
-<div style="display: flex; gap: 30px; align-items: flex-start;">
+<div style="display: flex; gap: 15px; align-items: flex-start;">
   <div style="flex: 1;">
     <p style="margin: 0 0 12px 0; font-size: 14px; color: #666;">
-      <span>{{ page.authors }}</span> <span style="margin-left: 12px;">{{ page.date | date: '%B %d, %Y' }}</span>
+      <span>{{ page.authors }}</span> <span style="margin: 0 8px;">·</span> <span>{{ page.venue }}</span> <span style="margin: 0 8px;">·</span> <span>{{ page.date | date: '%b %d, %Y' }}</span>
     </p>
     
     <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #333;">
@@ -31,6 +31,6 @@ citation: #''
   </div>
   
   <div style="flex: 0 0 auto;">
-    <!-- Add image path here -->
+    <!-- Add image path here (150x150px recommended) -->
   </div>
 </div>

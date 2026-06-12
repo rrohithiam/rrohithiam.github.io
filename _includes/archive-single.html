@@ -64,8 +64,6 @@
       <p style="margin: 12px 0 0 0; font-size: 14px; position: relative;">
         {% if post.paperurl contains 'arxiv' %}
           <a href="{{ post.paperurl }}" style="text-decoration: none; color: #0066cc; font-weight: 500;">arXiv</a>
-        {% elsif post.paperurl contains 'doi' %}
-          <a href="{{ post.paperurl }}" style="text-decoration: none; color: #0066cc; font-weight: 500;">DOI</a>
         {% else %}
           <a href="{{ post.paperurl }}" style="text-decoration: none; color: #0066cc; font-weight: 500;">Paper</a>
         {% endif %}
@@ -103,6 +101,24 @@
 
   </article>
 </div>
+
+<script>
+function toggleBibtex(element) {
+  const bibtexId = element.getAttribute('data-bibtex-id');
+  const bibtexBox = document.getElementById(bibtexId);
+  if (bibtexBox) {
+    bibtexBox.style.display = bibtexBox.style.display === 'none' ? 'block' : 'none';
+  }
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.bibtex-toggle') && !e.target.closest('.bibtex-box')) {
+    document.querySelectorAll('.bibtex-box').forEach(box => {
+      box.style.display = 'none';
+    });
+  }
+});
+</script>
 
 <script>
 function toggleBibtex(element) {
