@@ -84,10 +84,11 @@
 
         {{/* Right column: image, top-aligned, natural aspect ratio */}}
         {% if post.image and post.image != '' %}
-          <div style="flex: 0 0 200px; margin-top: 6px;">
+          {% assign img_width = post.image_width | default: "110" %}
+          <div style="flex: 0 0 {{ img_width }}px; margin-top: 6px;">
             <img src="{{ site.baseurl }}/images/{{ post.image }}"
                  alt="teaser"
-                 style="width: 200px; height: auto; display: block; border-radius: 4px;
+                 style="width: {{ img_width }}px; height: auto; display: block; border-radius: 4px;
                         box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
           </div>
         {% endif %}
