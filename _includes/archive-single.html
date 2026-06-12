@@ -27,9 +27,12 @@
     {% endif %}
 
     {% if post.collection == 'publications' %}
-      <h2 class="archive__item-title" itemprop="headline" style="font-size: 1em; margin: 8px 0; cursor: default;">
-        <span style="text-decoration: none;">{{ title }}</span>
+      <h2 class="archive__item-title" itemprop="headline" style="font-size: 1em; margin: 8px 0; cursor: default; text-decoration: none !important;">
+        <span style="text-decoration: none !important;">{{ title }}</span>
       </h2>
+      <style>
+        .archive__item-title:hover { text-decoration: none !important; }
+      </style>
     {% else %}
       <h2 class="archive__item-title" itemprop="headline">
         {% if post.link %}

@@ -80,6 +80,6 @@ citation: #''
   </div>
   
   <div style="flex: 0 0 auto;">
-    <img src="{{ site.baseurl }}/images/spidey.pdf" alt="teaser" style="width: 180px; height: auto; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <img src="{{ site.baseurl }}/images/spidey.jpg" alt="teaser" style="width: 180px; height: auto; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
   </div>
 </div>
