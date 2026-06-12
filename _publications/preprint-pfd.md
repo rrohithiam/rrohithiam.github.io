@@ -1,5 +1,6 @@
 ---
 title: "Probability-Flow Distillation: Exact Wasserstein Gradient Flow for High-Fidelity 3D Generation"
+authors: "John Doe, Jane Smith, Alex Johnson"
 collection: publications
 category: preprints
 permalink: /publication/preprint-pfd
@@ -12,6 +13,10 @@ citation: #''
 
 <div style="display: flex; gap: 30px; align-items: flex-start;">
   <div style="flex: 1;">
+    <p style="margin: 0 0 8px 0; font-size: 14px; color: #666;">
+      {{ page.authors }}
+    </p>
+    
     <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #333;">
       Probability-Flow Distillation presents a method for high-fidelity 3D generation using exact Wasserstein gradient flows.
     </p>
