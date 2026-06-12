@@ -26,7 +26,7 @@ author:
   avatar           : "profile.png"
   name             : "ரோஹித் இரமணன்<br>(Rohith Ramanan)"
   pronouns         : # example: "she/her"  
-  bio              : "r"
+  bio              : # ""
   location         : "Chennai, India"
   employer         : "Indian Institute of Technology Madras"
   uri              : # URL
@@ -51,7 +51,7 @@ author:
   bitbucket        : # Username - Update with your username on the site
   codepen          : # Username
   dribbble         : # Username
-  github           : "rrohithiam"
+  github           : # Username
   kaggle           : # Username  
   stackoverflow    : # User number or user number and name (i.e., use "1" or "1/jeff-atwood")    
 
