@@ -8,7 +8,7 @@ date: 2026-05-09
 venue: 'arXiv'
 paperurl: 'https://doi.org/10.48550/arXiv.2605.09071'
 image: 'pfd.png'
-description: "Probability-Flow Distillation presents a method for high-fidelity 3D generation using exact Wasserstein gradient flows."
+description: "We show that the sampling limitations of SDI arise from its reliance on the posterior mean estimator, which is equivalent to a single-step Euler discretization of the deterministic reverse DDIM process. Motivated by this observation, we introduce Probability-Flow Distillation and establish its equivalence to a Wasserstein gradient flow. The resulting method improves distribution matching and generates higher-quality 3D assets with finer geometric and texture details."
 bibtex: |
   @misc{rrohitithpfd2026,
         title={Probability-Flow Distillation: Exact Wasserstein Gradient Flow for High-Fidelity 3D Generation}, 
