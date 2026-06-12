@@ -22,5 +22,5 @@ Work experience
 ------
 * Data Science Intern (Summer 2024)
   * National Payments Corporation of India, Hyderabad
-  * Research in Positive–Unlabeled (PU) learning for UPI fraud detection
+  * Research in Positive-Unlabeled (PU) learning for UPI fraud detection
   * Also in graph-based semi-supervised learning, including Laplacian and Poisson learning
