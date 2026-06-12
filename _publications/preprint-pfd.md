@@ -24,59 +24,38 @@ citation: #''
     
     <p style="margin: 12px 0 0 0; font-size: 14px;">
       <a href="https://doi.org/10.48550/arXiv.2605.09071" style="text-decoration: none; color: #0066cc; font-weight: 500;">arXiv</a> | 
-      <a href="{{ page.bibtexurl }}" style="text-decoration: none; color: #0066cc; font-weight: 500; position: relative; cursor: help;" class="bibtex-link" data-bibtex="@misc{rrohitithpfd2026,
+      <a href="#" style="text-decoration: none; color: #0066cc; font-weight: 500; position: relative; cursor: pointer;" class="bibtex-link" onclick="event.preventDefault(); toggleBibtex(event);">bibtex</a>
+      <div id="bibtex-tooltip" style="display: none; position: absolute; bottom: 135%; left: 0; background-color: #fafafa; color: #333; padding: 15px; border-radius: 6px; border: 1px solid #e0e0e0; font-size: 12px; font-family: 'Courier New', monospace; white-space: pre-wrap; word-wrap: break-word; width: 420px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 350px; overflow-y: auto; background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);">@misc{rrohitithpfd2026,
       title={Probability-Flow Distillation: Exact Wasserstein Gradient Flow for High-Fidelity 3D Generation}, 
       author={Rohith Ramanan and A. N. Rajagopalan},
       year={2026},
       eprint={2605.09071},
       archivePrefix={arXiv},
       primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2605.09071}, 
-}">bibtex</a>
+      url={https://arxiv.org/abs/2605.09071}
+}</div>
     </p>
-    <style>
-      .bibtex-link::before {
-        content: attr(data-bibtex);
-        position: absolute;
-        bottom: 125%;
-        left: 0;
-        background-color: #f5f5f5;
-        color: #333;
-        padding: 10px;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        font-size: 11px;
-        font-family: 'Courier New', monospace;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        width: 300px;
-        z-index: 1000;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        pointer-events: none;
+    <script>
+      function toggleBibtex(e) {
+        const tooltip = document.getElementById('bibtex-tooltip');
+        if (tooltip.style.display === 'none') {
+          tooltip.style.display = 'block';
+          document.addEventListener('click', closeBibtexOnClickOutside);
+        } else {
+          tooltip.style.display = 'none';
+          document.removeEventListener('click', closeBibtexOnClickOutside);
+        }
       }
-      .bibtex-link::after {
-        content: '';
-        position: absolute;
-        bottom: 120%;
-        left: 10px;
-        width: 0;
-        height: 0;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 5px solid #f5f5f5;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
+      
+      function closeBibtexOnClickOutside(e) {
+        const tooltip = document.getElementById('bibtex-tooltip');
+        const link = document.querySelector('.bibtex-link');
+        if (!tooltip.contains(e.target) && !link.contains(e.target)) {
+          tooltip.style.display = 'none';
+          document.removeEventListener('click', closeBibtexOnClickOutside);
+        }
       }
-      .bibtex-link:hover::before,
-      .bibtex-link:hover::after {
-        opacity: 1;
-        visibility: visible;
-      }
-    </style>
+    </script>
   </div>
   
   <div style="flex: 0 0 auto;">
