@@ -1,0 +1,376 @@
+---
+layout: none
+title: "Probability-Flow Distillation"
+permalink: /projects/pfd/
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Probability-Flow Distillation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #fff;
+      color: #1a1a1a;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 4rem 2rem 2rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 600;
+      line-height: 1.2;
+      color: #111;
+      margin-bottom: 1.5rem;
+    }
+
+    .authors {
+      font-size: 15px;
+      margin-bottom: 0.3rem;
+    }
+    .authors sup { font-size: 10px; }
+
+    .affiliations {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+    .affiliations sup { font-size: 10px; }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+      margin-bottom: 0;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 7px 18px;
+      border-radius: 100px;
+      border: 1.5px solid #222;
+      background: #222;
+      color: #fff;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn:hover { background: #000; text-decoration: none; }
+    .btn-muted { background: #555; border-color: #555; cursor: default; }
+    .btn-muted:hover { background: #555; }
+
+    /* ── SECTIONS ── */
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem;
+    }
+
+    .container h2 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #111;
+    }
+
+    .container p {
+      color: #333;
+      margin-bottom: 0.9rem;
+      font-size: 15.5px;
+    }
+    .container p:last-child { margin-bottom: 0; }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid #e5e5e5;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* ── VIDEO ── */
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .video-item { text-align: center; }
+    .video-item p {
+      font-size: 13px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.4rem;
+      margin-bottom: 0;
+    }
+    .video-wrap {
+      width: 100%;
+      background: #f3f3f3;
+      border-radius: 6px;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+    }
+    .video-wrap video {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+    /* single full-width video */
+    .video-single .video-wrap { aspect-ratio: 16/9; }
+
+    /* ── METHOD ── */
+    .method-fig {
+      margin: 1rem 0 0.5rem;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .method-fig img { width: 100%; height: auto; display: block; }
+    .fig-caption {
+      font-size: 13px;
+      color: #555;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    /* ── BIBTEX ── */
+    .bibtex-wrap {
+      position: relative;
+      background: #f7f7f7;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 1rem;
+    }
+    .bibtex-wrap pre {
+      font-family: 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.7;
+      color: #333;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 10px; right: 12px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 12px;
+      padding: 3px 10px;
+      cursor: pointer;
+      color: #555;
+      transition: border-color 0.15s;
+    }
+    .copy-btn:hover { border-color: #888; color: #111; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid #e5e5e5;
+      text-align: center;
+      padding: 1.5rem 2rem;
+      font-size: 13px;
+      color: #888;
+    }
+    footer a { color: #888; }
+    footer a:hover { color: #333; }
+
+    @media (max-width: 600px) {
+      .video-grid { grid-template-columns: 1fr; }
+      .hero { padding: 2.5rem 1.25rem 1.5rem; }
+      .container { padding: 2rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Probability-Flow Distillation: Exact Wasserstein Gradient Flow for High-Fidelity 3D Generation</h1>
+
+  <p class="authors">
+    <a href="{{ site.baseurl }}/">Rohith Ramanan</a><sup>1</sup>,
+    A. N. Rajagopalan<sup>1</sup>
+  </p>
+  <p class="affiliations">
+    <sup>1</sup>Indian Institute of Technology Madras
+  </p>
+
+  <div class="hero-buttons">
+    <a class="btn" href="https://arxiv.org/abs/2605.09071" target="_blank" rel="noopener">
+      <!-- arXiv logo -->
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.53 5.26L0 12l4.53 6.74h3.09L3.09 12l4.53-6.74H4.53zm14.94 0h-3.09L20.91 12l-4.53 6.74h3.09L24 12l-4.53-6.74zM9.63 16.11l1.09-1.75L9.2 12l1.52-2.36L9.63 7.89 6.97 12l2.66 4.11zm4.74 0L17.03 12l-2.66-4.11-1.09 1.75L14.8 12l-1.52 2.36 1.09 1.75z"/>
+      </svg>
+      arXiv
+    </a>
+    <a class="btn btn-muted" href="#" onclick="return false;" title="Coming soon">
+      <!-- GitHub logo -->
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+      </svg>
+      Code <span style="font-weight:400; opacity:0.7; font-size:12px;">(coming soon)</span>
+    </a>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ABSTRACT -->
+<div class="container" id="abstract">
+  <h2>Abstract</h2>
+  <p>
+    Score distillation sampling (SDS) has enabled text-to-3D generation by distilling 2D diffusion priors into
+    neural radiance fields, but suffers from well-known artifacts including over-saturation and geometric
+    inconsistency. We show that these failure modes stem from an inexact approximation of the Wasserstein
+    gradient flow in the distillation objective.
+  </p>
+  <p>
+    Probability-Flow Distillation (PFD) corrects this by deriving an analytically exact gradient flow in
+    probability space, recovering the true transport direction at each distillation step. The result is a
+    simple, drop-in replacement for SDS that produces sharper geometry, richer texture, and improved
+    multi-view consistency — without additional training or inference overhead.
+  </p>
+</div>
+
+<hr class="divider" />
+
+<!-- VIDEO -->
+<div class="container" id="video">
+  <h2>Results</h2>
+  <p>Qualitative comparisons of PFD against SDS baselines on text-to-3D generation.</p>
+
+  <!--
+    Option A: single video
+    Place your mp4 at /files/pfd_demo.mp4
+  -->
+  <div class="video-single">
+    <div class="video-wrap">
+      <video controls loop muted playsinline
+             src="{{ site.baseurl }}/files/pfd_demo.mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+
+  <!--
+    Option B: 2x2 grid of short clips (comment out Option A and uncomment this)
+    Place clips at /files/pfd_clip1.mp4 etc.
+
+  <div class="video-grid">
+    <div class="video-item">
+      <div class="video-wrap">
+        <video autoplay loop muted playsinline src="{{ site.baseurl }}/files/pfd_clip1.mp4"></video>
+      </div>
+      <p>"A prompt describing result 1"</p>
+    </div>
+    <div class="video-item">
+      <div class="video-wrap">
+        <video autoplay loop muted playsinline src="{{ site.baseurl }}/files/pfd_clip2.mp4"></video>
+      </div>
+      <p>"A prompt describing result 2"</p>
+    </div>
+    <div class="video-item">
+      <div class="video-wrap">
+        <video autoplay loop muted playsinline src="{{ site.baseurl }}/files/pfd_clip3.mp4"></video>
+      </div>
+      <p>"A prompt describing result 3"</p>
+    </div>
+    <div class="video-item">
+      <div class="video-wrap">
+        <video autoplay loop muted playsinline src="{{ site.baseurl }}/files/pfd_clip4.mp4"></video>
+      </div>
+      <p>"A prompt describing result 4"</p>
+    </div>
+  </div>
+  -->
+</div>
+
+<hr class="divider" />
+
+<!-- METHOD -->
+<div class="container" id="method">
+  <h2>Method</h2>
+  <p>
+    Standard SDS computes gradients by treating the diffusion denoiser as a fixed critic — equivalent to
+    an approximate Wasserstein gradient step that accumulates error over the distillation trajectory.
+    PFD solves the exact continuity equation at each step, yielding a provably convergent flow toward
+    the data manifold.
+  </p>
+
+  <!--
+    Place your method diagram at /images/pfd_method.png
+    Update the src and caption below.
+  -->
+  <div class="method-fig">
+    <img src="{{ site.baseurl }}/images/pfd_method.png" alt="PFD method overview" />
+  </div>
+  <p class="fig-caption">
+    Figure 1. Overview of Probability-Flow Distillation. Left: standard SDS gradient path.
+    Right: PFD corrected flow toward the data manifold.
+  </p>
+</div>
+
+<hr class="divider" />
+
+<!-- BIBTEX -->
+<div class="container" id="bibtex">
+  <h2>BibTeX</h2>
+  <div class="bibtex-wrap">
+    <button class="copy-btn" onclick="copyBibtex()">copy</button>
+    <pre id="bibtex-text">@misc{rrohitithpfd2026,
+  title         = {Probability-Flow Distillation: Exact Wasserstein Gradient
+                   Flow for High-Fidelity 3D Generation},
+  author        = {Rohith Ramanan and A. N. Rajagopalan},
+  year          = {2026},
+  eprint        = {2605.09071},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+  url           = {https://arxiv.org/abs/2605.09071}
+}</pre>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  Website template inspired by <a href="https://nerfies.github.io" target="_blank" rel="noopener">Nerfies</a>.
+  &nbsp;·&nbsp;
+  <a href="{{ site.baseurl }}/">Back to site</a>
+</footer>
+
+<script>
+function copyBibtex() {
+  const text = document.getElementById('bibtex-text').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'copied!';
+    setTimeout(() => btn.textContent = 'copy', 2000);
+  });
+}
+</script>
+
+</body>
+</html>
