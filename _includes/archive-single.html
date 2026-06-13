@@ -85,9 +85,9 @@
           {% if post.paperurl %}
             <div style="font-size: 14px; position: relative; display: inline-block;">
               {% if post.category == 'preprints' or post.paperurl contains 'arxiv' %}
-                <a href="{{ post.paperurl }}" class="pub-link">arXiv</a>
+                <a href="{{ post.paperurl }}" class="pub-link" target="_blank" rel="noopener noreferrer">arXiv</a>
               {% else %}
-                <a href="{{ post.paperurl }}" class="pub-link">paper</a>
+                <a href="{{ post.paperurl }}" class="pub-link" target="_blank" rel="noopener noreferrer">paper</a>
               {% endif %}
 
               {% if post.bibtex %}
