@@ -1,4 +1,4 @@
-{% include base_path %}
+<!-- {% include base_path %}
 
 {% if post.header.teaser %}
   {% capture teaser %}{{ post.header.teaser }}{% endcapture %}
@@ -90,6 +90,173 @@
                  alt="teaser"
                  style="width: {{ img_width }}px; height: auto; display: block; border-radius: 4px;
                         box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          </div>
+        {% endif %}
+
+      </div>
+
+    {% else %}
+      <h2 class="archive__item-title" itemprop="headline">
+        {% if post.link %}
+          <a href="{{ post.link }}">{{ title }}</a> <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
+        {% else %}
+          <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
+        {% endif %}
+      </h2>
+
+      {% if post.read_time %}
+        <p class="page__meta"><i class="fa fa-clock" aria-hidden="true"></i> {% include read-time.html %}</p>
+      {% endif %}
+
+      {% if post.collection == 'teaching' %}
+        <p> {{ post.type }}, <i>{{ post.venue }}</i>, {{ post.date | default: "1900-01-01" | date: "%Y" }} </p>
+      {% elsif post.date %}
+        <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> {{ site.data.ui-text[site.locale].date_label | default: "Published:" }}</strong> <time datetime="{{ post.date | default: "1900-01-01" | date_to_xmlschema }}">{{ post.date | default: "1900-01-01" | date: "%B %d, %Y" }}</time></p>
+      {% endif %}
+
+      {% if post.excerpt and site.read_more != 'enabled' %}
+        <p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify }}</p>
+      {% elsif post.excerpt and site.read_more == 'enabled' %}
+        <p class="archive__item-excerpt" itemprop="description"><p>{{ post.excerpt | markdownify | remove: '<p>' | remove: '</p>' }}<strong><a href="{{ base_path }}{{ post.url }}" rel="permalink"> Read more</a></strong></p></p>
+      {% endif %}
+    {% endif %}
+
+    {% if post.citation %}
+      <p>Recommended citation: {{ post.citation }}</p>
+    {% endif %}
+
+  </article>
+</div>
+
+<script>
+function toggleBibtex(element) {
+  const bibtexId = element.getAttribute('data-bibtex-id');
+  const bibtexBox = document.getElementById(bibtexId);
+  if (bibtexBox) {
+    bibtexBox.style.display = bibtexBox.style.display === 'none' ? 'block' : 'none';
+  }
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.bibtex-toggle') && !e.target.closest('.bibtex-box')) {
+    document.querySelectorAll('.bibtex-box').forEach(box => {
+      box.style.display = 'none';
+    });
+  }
+});
+</script> -->
+
+{% include base_path %}
+
+{% if post.header.teaser %}
+  {% capture teaser %}{{ post.header.teaser }}{% endcapture %}
+{% else %}
+  {% assign teaser = site.teaser %}
+{% endif %}
+
+{% if post.id %}
+  {% assign title = post.title | markdownify | remove: "<p>" | remove: "</p>" %}
+{% else %}
+  {% assign title = post.title %}
+{% endif %}
+
+<div class="{{ include.type | default: "list" }}__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    {% if include.type == "grid" and teaser %}
+      <div class="archive__item-teaser">
+        <img src=
+          {% if teaser contains "://" %}
+            "{{ teaser }}"
+          {% else %}
+            "{{ teaser | prepend: "/images/" | prepend: base_path }}"
+          {% endif %}
+          alt="">
+      </div>
+    {% endif %}
+
+    {% if post.collection == 'publications' %}
+
+      <style>
+        .archive__item-title:hover { text-decoration: none !important; }
+
+        .pub-meta       { color: var(--global-text-color, inherit); opacity: 0.6; }
+        .pub-desc       { color: var(--global-text-color, inherit); }
+        .pub-link       { color: var(--link-color, #0066cc) !important; text-decoration: none; font-weight: 500; }
+        .pub-link:hover { text-decoration: underline !important; }
+
+        .bibtex-box {
+          background: var(--global-bg-color, #fafafa);
+          color: var(--global-text-color, #333);
+          border: 1px solid var(--border-color, #e0e0e0);
+          padding: 15px;
+          border-radius: 6px;
+          font-size: 12px;
+          font-family: 'Courier New', monospace;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          width: 420px;
+          max-height: 350px;
+          overflow-y: auto;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          position: absolute;
+          bottom: 100%;
+          left: 0;
+          margin-bottom: 8px;
+          z-index: 1000;
+          display: none;
+        }
+      </style>
+
+      <div style="display: flex; gap: 15px; align-items: flex-start; margin: 0;">
+
+        <div style="flex: 1; min-width: 0;">
+
+          <h2 class="archive__item-title" itemprop="headline"
+              style="font-size: 1em; margin: 8px 0 6px 0; cursor: default; text-decoration: none !important;">
+            <span style="text-decoration: none !important;">{{ title }}</span>
+          </h2>
+
+          <p class="pub-meta" style="margin: 0 0 8px 0; font-size: 14px;">
+            {% if post.authors %}
+              <span>{{ post.authors }}</span>
+              <span style="margin: 0 6px;">·</span>
+            {% endif %}
+            <span>{{ post.venue }}</span>
+            <span style="margin: 0 6px;">·</span>
+            <span>{{ post.date | default: "1900-01-01" | date: "%b %d, %Y" }}</span>
+          </p>
+
+          {% if post.description %}
+            <p class="pub-desc" style="margin: 0 0 10px 0; font-size: 15px; line-height: 1.5;">{{ post.description }}</p>
+          {% endif %}
+
+          {% if post.paperurl %}
+            <div style="font-size: 14px; position: relative; display: inline-block;">
+              {% if post.category == 'preprints' or post.paperurl contains 'arxiv' %}
+                <a href="{{ post.paperurl }}" class="pub-link">arXiv</a>
+              {% else %}
+                <a href="{{ post.paperurl }}" class="pub-link">paper</a>
+              {% endif %}
+
+              {% if post.bibtex %}
+                <span style="opacity: 0.4; margin: 0 2px;">|</span>
+                <a href="#" class="pub-link bibtex-toggle"
+                   data-bibtex-id="bibtex-{{ post.title | slugify }}"
+                   onclick="event.preventDefault(); toggleBibtex(this);">bibtex</a>
+                <div id="bibtex-{{ post.title | slugify }}" class="bibtex-box">{{ post.bibtex }}</div>
+              {% endif %}
+            </div>
+          {% endif %}
+
+        </div>
+
+        {% if post.image and post.image != '' %}
+          {% assign img_width = post.image_width | default: "110" %}
+          <div style="flex: 0 0 {{ img_width }}px; margin-top: 6px;">
+            <img src="{{ site.baseurl }}/images/{{ post.image }}"
+                 alt="teaser"
+                 style="width: {{ img_width }}px; height: auto; display: block; border-radius: 4px;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
           </div>
         {% endif %}
 
