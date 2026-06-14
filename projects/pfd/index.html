@@ -289,8 +289,8 @@
 
       <div class="content has-text-justified">
         <p>
-          Beyond fixing the numerical approximation, PFD has a deeper theoretical character.
-          We prove that the expected PFD gradient estimator <strong>exactly matches the
+          Beyond being a natural extension to SDI, PFD has a deeper theoretical interpretation.
+          Our main theoretical result shows that the PFD gradient <strong>exactly matches the
           Wasserstein gradient</strong> of a time-averaged KL divergence functional between
           the generated distribution and the target diffusion prior:
         </p>
@@ -298,18 +298,19 @@
           \[ \mathbb{E}_t[\Delta_t] = \nabla_{\mathbf{x}} \frac{\delta \mathcal{F}[q_0]}{\delta q_0(\mathbf{x})} \]
         </div>
         <p>
-          where \( \mathcal{F}[q_0] = \mathbb{E}_t[w(t) D_{\mathrm{KL}}(q_t \,\|\, p_t)] \).
-          This means the particle dynamics induced by PFD constitute a <em>gradient flow in
-          Wasserstein space</em>, with a global minimum at \( q_0 = p_0 \) —
-          the target distribution. PFD is therefore not merely a heuristic improvement over SDS;
-          it is a principled <strong>distribution-matching algorithm</strong>.
+          where \( \mathcal{F}[q_0] = \mathbb{E}_t[w(t) D_{\mathrm{KL}}(q_t \,\|\, p_t)] \). 
+          In other words, the particle dynamics induced by PFD follow a <em>gradient flow in
+          Wasserstein space</em>, with a global minimum at \( q_0 = p_0 \), i.e., when the
+          generated distribution matches the target distribution.
         </p>
         <p>
-          Intuitively, SDS is mode-seeking (it drives particles toward a single high-probability point),
-          whereas PFD is distribution-matching (it drives the entire particle ensemble toward the
-          target distribution). The 2D experiment below makes this concrete.
+          This perspective also helps explain an important empirical difference between SDS, SDI, and PFD. SDS is fundamentally mode-seeking, 
+          while SDI alleviates this behavior to some extent but still struggles to faithfully capture the full target distribution. 
+          In contrast, PFD performs distribution matching through its underlying Wasserstein gradient flow. The simple 2D experiment below 
+          provides a visual illustration of this behavior.
         </p>
       </div>
+
 
       <div class="has-text-centered" style="margin: 1.5rem 0;">
         <img src="./static/images/fig_particles.png"
@@ -323,6 +324,19 @@
           (c) <strong>PFD (Ours)</strong> faithfully reconstructs the full multi-modal distribution.
         </p>
       </div>
+      
+      <div style="background:#fffbf0; border-left:4px solid #f5a623; border-radius:4px;
+                    padding:14px 18px; margin: 1.5rem 0;">
+          <span style="font-family:monospace; font-size:11px; font-weight:700;
+                       letter-spacing:0.1em; text-transform:uppercase; color:#c47d00;
+                       display:block; margin-bottom:6px;">Note</span>
+          <p style="margin:0; font-size:14.5px; line-height:1.6; color:#444;">
+            In this toy example, a secondary network is trained to learn the score of the current particle distribution
+             in order to solve the forward PF-ODE in both SDI and PFD. This differs from the SDI algorithm as originally
+              described in their paper; we refer interested readers to our paper for a detailed discussion.
+          </p>
+      </div>
+
     </div>
   </section>
 
