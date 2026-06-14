@@ -4,19 +4,16 @@
   <meta charset="utf-8">
   <meta name="description"
         content="Probability-Flow Distillation: Exact Wasserstein Gradient Flow for High-Fidelity 3D Generation.">
-  <meta name="keywords" content="Probability-Flow Distillation, 3D Generation, Score Distillation, Wasserstein">
+  <meta name="keywords" content="Probability-Flow Distillation, PFD, 3D Generation, Score Distillation, Wasserstein, NeRF, text-to-3D">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Probability-Flow Distillation</title>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
   <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -24,9 +21,76 @@
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
+
+  <style>
+    /* ── extra styles on top of nerfies base ── */
+    .publication-title { font-size: 2rem !important; }
+
+    /* teaser grid */
+    .teaser-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+    .teaser-grid video,
+    .teaser-grid img {
+      width: 100%; border-radius: 4px;
+      aspect-ratio: 1 / 1; object-fit: cover;
+    }
+    .teaser-caption { font-style: italic; font-size: 13px; color: #555; text-align: center; }
+
+    /* comparison table */
+    .comparison-table { width: 100%; border-collapse: collapse; }
+    .comparison-table td { padding: 4px; text-align: center; vertical-align: top; }
+    .comparison-table td img,
+    .comparison-table td video {
+      width: 100%; border-radius: 4px;
+    }
+    .comparison-table th {
+      font-weight: 600; font-size: 13px;
+      padding: 4px 8px; text-align: center;
+      border-bottom: 2px solid #ddd;
+    }
+    .row-label {
+      font-style: italic; font-size: 12px; color: #555;
+      text-align: center; padding-top: 2px;
+    }
+
+    /* metrics table */
+    .metrics-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .metrics-table th { background: #f5f5f5; padding: 8px 10px; text-align: center; border-bottom: 2px solid #ccc; }
+    .metrics-table td { padding: 7px 10px; text-align: center; border-bottom: 1px solid #eee; }
+    .metrics-table tr.ours { font-weight: 700; background: #f0f7ff; }
+    .metrics-table tr.ours td { color: #1a56db; }
+
+    /* method figure */
+    .method-fig { width: 100%; border-radius: 6px; }
+
+    /* 360 video grid */
+    .video-360-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 1rem;
+    }
+    .video-360-item { text-align: center; }
+    .video-360-item video { width: 100%; border-radius: 6px; }
+    .video-360-item p { font-style: italic; font-size: 12px; color: #555; margin-top: 4px; }
+
+
+    /* section divider */
+    .section-divider { border: none; border-top: 1px solid #e8e8e8; margin: 0; }
+
+    @media (max-width: 600px) {
+      .teaser-grid { grid-template-columns: repeat(2, 1fr); }
+      .video-360-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
 </head>
 <body>
 
+<!-- ── NAVBAR ── -->
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
@@ -38,21 +102,24 @@
   <div class="navbar-menu">
     <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
       <a class="navbar-item" href="https://rrohithiam.github.io">
-        <span class="icon">
-          <i class="fas fa-home"></i>
-        </span>
+        <span class="icon"><i class="fas fa-home"></i></span>
       </a>
     </div>
   </div>
 </nav>
 
 
+<!-- ── HERO ── -->
 <section class="hero">
   <div class="hero-body">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Probability-Flow Distillation: Exact Wasserstein Gradient Flow for High-Fidelity 3D Generation</h1>
+
+          <h1 class="title is-1 publication-title">
+            Probability-Flow Distillation: Exact Wasserstein Gradient Flow for High-Fidelity 3D Generation
+          </h1>
+
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a href="https://rrohithiam.github.io">Rohith Ramanan</a><sup>1</sup>,
@@ -62,29 +129,25 @@
             </span>
           </div>
 
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>Indian Institute of Technology Madras</span>
+          <div class="is-size-5 publication-authors" style="margin-top:0.3rem;">
+            <span class="author-block">
+              <sup>1</sup>Indian Institute of Technology Madras
+            </span>
           </div>
 
-          <div class="column has-text-centered">
+          <div class="column has-text-centered" style="margin-top:0.5rem;">
             <div class="publication-links">
-              <!-- arXiv Link. -->
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2605.09071"
+                <a href="https://arxiv.org/abs/2605.09071" target="_blank"
                    class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                    <i class="ai ai-arxiv"></i>
-                  </span>
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
                   <span>arXiv</span>
                 </a>
               </span>
-              <!-- Code Link. -->
               <span class="link-block">
                 <a class="external-link button is-normal is-rounded is-dark"
-                   style="opacity: 0.6; cursor: default;" onclick="return false;">
-                  <span class="icon">
-                    <i class="fab fa-github"></i>
-                  </span>
+                   style="opacity:0.55; cursor:default;" onclick="return false;">
+                  <span class="icon"><i class="fab fa-github"></i></span>
                   <span>Code (coming soon)</span>
                 </a>
               </span>
@@ -98,83 +161,315 @@
 </section>
 
 
-<!-- Teaser video -->
+<!-- ── TEASER ── -->
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/pfd_demo.mp4" type="video/mp4">
-      </video>
-      <h2 class="subtitle has-text-centered">
-        Qualitative results of <strong>Probability-Flow Distillation</strong> on text-to-3D generation,
-        compared against SDS baselines.
+      <!--
+        TEASER: 6 short 360° clips in a 3×2 grid.
+        Place videos at ./static/videos/teaser_bunny.mp4 etc.
+        Or replace with a single full-width video: teaser_main.mp4
+      -->
+      <div class="teaser-grid">
+        <div>
+          <video autoplay muted loop playsinline>
+            <source src="./static/videos/teaser_bunny.mp4" type="video/mp4">
+          </video>
+          <p class="teaser-caption">"A baby bunny on a stack of pancakes."</p>
+        </div>
+        <div>
+          <video autoplay muted loop playsinline>
+            <source src="./static/videos/teaser_jay.mp4" type="video/mp4">
+          </video>
+          <p class="teaser-caption">"A blue jay on a basket of rainbow macarons."</p>
+        </div>
+        <div>
+          <video autoplay muted loop playsinline>
+            <source src="./static/videos/teaser_cottage.mp4" type="video/mp4">
+          </video>
+          <p class="teaser-caption">"A 3D model of an adorable cottage with a thatched roof."</p>
+        </div>
+        <div>
+          <video autoplay muted loop playsinline>
+            <source src="./static/videos/teaser_burger.mp4" type="video/mp4">
+          </video>
+          <p class="teaser-caption">"A DSLR photograph of a hamburger."</p>
+        </div>
+        <div>
+          <video autoplay muted loop playsinline>
+            <source src="./static/videos/teaser_croissant.mp4" type="video/mp4">
+          </video>
+          <p class="teaser-caption">"A delicious croissant."</p>
+        </div>
+        <div>
+          <video autoplay muted loop playsinline>
+            <source src="./static/videos/teaser_bagel.mp4" type="video/mp4">
+          </video>
+          <p class="teaser-caption">"A bagel filled with cream cheese and lox."</p>
+        </div>
+      </div>
+      <h2 class="subtitle has-text-centered" style="margin-top:1.2rem;">
+        <strong>Probability-Flow Distillation (PFD)</strong> generates high-fidelity 3D objects
+        with fine-grained texture and geometry, outperforming prior score distillation methods.
       </h2>
     </div>
   </div>
 </section>
 
+<hr class="section-divider">
 
+
+<!-- ── ABSTRACT ── -->
 <section class="section">
   <div class="container is-max-desktop">
-
-    <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
+
+        <!-- TL;DR -->
+        <div style="background:#f5f8ff; border-left:4px solid #3273dc; border-radius:4px;
+                    padding:14px 18px; margin-bottom:1.4rem; text-align:left;">
+          <span style="font-family:monospace; font-size:11px; font-weight:700;
+                       letter-spacing:0.1em; text-transform:uppercase; color:#3273dc;
+                       display:block; margin-bottom:6px;">TL;DR</span>
+          <p style="margin:0; font-size:15px; line-height:1.6; color:#333;">
+            SDS-style methods enable sampling in parameter space via optimization but suffer from
+            mode collapse and biased gradients; we propose Probability-Flow Distillation (PFD),
+            inducing Wasserstein gradient flow for improved distribution matching.
+          </p>
+        </div>
+
         <div class="content has-text-justified">
           <p>
-            Score distillation sampling (SDS) has enabled text-to-3D generation by distilling 2D
-            diffusion priors into neural radiance fields, but suffers from well-known artifacts
-            including over-saturation and geometric inconsistency.
+            Score Distillation Sampling (SDS) and its variants have been widely used for text-to-3D
+            generation by distilling 2D image diffusion priors. However, the standard SDS objective
+            is prone to severe mode collapse, frequently yielding over-smoothed and over-saturated results.
+            Although recent advancements, such as Score Distillation via Inversion (SDI), mitigate these
+            artifacts and produce visually sharper models, they ultimately fail to faithfully capture the
+            full target distribution.
           </p>
           <p>
-            We show that these failure modes stem from an inexact approximation of the Wasserstein
-            gradient flow in the distillation objective. Probability-Flow Distillation (PFD) corrects
-            this by deriving an analytically exact gradient flow in probability space, recovering the
-            true transport direction at each distillation step.
-          </p>
-          <p>
-            The result is a simple, drop-in replacement for SDS that produces sharper geometry,
-            richer texture, and improved multi-view consistency — without additional training or
-            inference overhead.
+            In this work, we show that the bottleneck limiting the sampling capacity of SDI stems from
+            its reliance on the posterior mean estimator, which is mathematically equivalent to a single-step
+            Euler approximation of the deterministic reverse DDIM trajectory. To address this, we propose
+            a naturally motivated extension termed <strong>Probability-Flow Distillation (PFD)</strong>.
+            We establish that PFD corresponds exactly to a Wasserstein gradient flow, thereby inducing
+            principled distribution-matching dynamics. Finally, we show that PFD can synthesize 3D assets
+            with fine-grained, high-fidelity details and achieve improved quality compared to existing methods.
           </p>
         </div>
       </div>
     </div>
-    <!--/ Abstract. -->
-
   </div>
 </section>
 
+<hr class="section-divider">
 
-<!-- Method -->
+
+<!-- ── METHOD ── -->
 <section class="section">
   <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Method</h2>
-        <div class="content has-text-justified">
-          <p>
-            Standard SDS computes gradients by treating the diffusion denoiser as a fixed critic —
-            equivalent to an approximate Wasserstein gradient step that accumulates error over the
-            distillation trajectory. PFD solves the exact continuity equation at each step, yielding
-            a provably convergent flow toward the data manifold.
+    <h2 class="title is-3 has-text-centered">Method</h2>
+
+    <!-- Key ideas as cards -->
+    <div class="columns is-multiline" style="margin-bottom:1.5rem;">
+
+      <div class="column is-half">
+        <div style="border:1px solid #e8e8e8; border-radius:8px; padding:18px 20px; height:100%;">
+          <p style="font-weight:700; margin-bottom:6px;">
+            <span style="color:#3273dc;">①</span>&nbsp; Why SDS collapses
+          </p>
+          <p style="font-size:14.5px; color:#444; line-height:1.6; margin:0;">
+            SDS treats the diffusion model as a fixed critic and computes gradients as the
+            difference between the noisy rendering and the denoiser output. This acts as a
+            <em>mode-seeking</em> force rather than a true sampling mechanism, causing the
+            3D representation to collapse toward a single high-probability mode — producing
+            over-smoothed geometry and over-saturated textures.
           </p>
         </div>
-        <!-- Replace pfd_method.png with your actual diagram in ./static/images/ -->
-        <img src="./static/images/pfd_method.png" alt="PFD Method Overview"
-             style="max-width: 100%; border-radius: 6px;" />
-        <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 14px; color: #666;">
-          Figure 1. Overview of Probability-Flow Distillation. Left: standard SDS gradient path.
-          Right: PFD corrected flow toward the data manifold.
-        </p>
+      </div>
+
+      <div class="column is-half">
+        <div style="border:1px solid #e8e8e8; border-radius:8px; padding:18px 20px; height:100%;">
+          <p style="font-weight:700; margin-bottom:6px;">
+            <span style="color:#3273dc;">②</span>&nbsp; Why SDI is still limited
+          </p>
+          <p style="font-size:14.5px; color:#444; line-height:1.6; margin:0;">
+            SDI improves SDS by replacing stochastic noise with deterministic DDIM inversion
+            in the forward pass, yielding sharper results. However, the reverse pass still
+            uses the DDIM posterior mean — which we show is mathematically equivalent to a
+            <em>single Euler step</em> along the PF-ODE. This coarse approximation prevents
+            SDI from capturing the full target distribution.
+          </p>
+        </div>
+      </div>
+
+      <div class="column is-half">
+        <div style="border:1px solid #e8e8e8; border-radius:8px; padding:18px 20px; height:100%;">
+          <p style="font-weight:700; margin-bottom:6px;">
+            <span style="color:#3273dc;">③</span>&nbsp; PFD: exact ODE integration
+          </p>
+          <p style="font-size:14.5px; color:#444; line-height:1.6; margin:0;">
+            PFD replaces the single-step posterior mean with <em>exact numerical integration</em>
+            of the Probability-Flow ODE in both the forward (rendering → noise) and reverse
+            (noise → clean sample) directions. This eliminates the Euler approximation error
+            and recovers a faithful estimate of the clean sample under the diffusion prior.
+          </p>
+        </div>
+      </div>
+
+      <div class="column is-half">
+        <div style="border:1px solid #e8e8e8; border-radius:8px; padding:18px 20px; height:100%;">
+          <p style="font-weight:700; margin-bottom:6px;">
+            <span style="color:#3273dc;">④</span>&nbsp; Wasserstein gradient flow
+          </p>
+          <p style="font-size:14.5px; color:#444; line-height:1.6; margin:0;">
+            We prove that the PFD gradient estimator exactly matches the
+            <strong>Wasserstein gradient</strong> of a time-averaged KL divergence between
+            the generated and target distributions. Unlike VSD, which also induces a
+            Wasserstein flow but requires LoRA fine-tuning, PFD achieves this with memory
+            usage comparable to SDI — no additional model adaptation needed.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="content has-text-justified">
+      <p>
+        In practice, we apply PFD to text-to-3D generation using a NeRF representation with
+        a progressive hash-grid encoding. The DDIM-ODE is solved with a higher-order DPM++ solver
+        using time-dependent discretization. A negative CFG scale in the forward pass and a positive
+        CFG scale in the reverse pass correctly align the source and target distributions —
+        a sign convention we formally derive from the PFD framework.
+      </p>
+    </div>
+
+    <!-- Figure 2: gradient comparison -->
+    <div class="has-text-centered" style="margin: 1.5rem 0;">
+      <!--
+        Place Figure 2 from the paper at ./static/images/fig_gradients.png
+        (screenshot or exported figure showing SDS / SDI / PFD gradient diagrams)
+      -->
+      <img src="./static/images/fig_gradients.png" class="method-fig"
+           alt="Comparison of SDS, SDI, and PFD gradient estimators" />
+      <p style="font-size:13px; color:#555; margin-top:0.5rem;">
+        <strong>Figure 2.</strong> (a) <strong>SDS</strong>: noisy sample via Gaussian perturbation,
+        reverse via single Euler step. (b) <strong>SDI</strong>: forward via DDIM inversion,
+        reverse still a single Euler step. (c) <strong>PFD (Ours)</strong>: both forward and reverse
+        computed via exact PF-ODE integration, eliminating the posterior mean approximation.
+      </p>
+    </div>
+
+
+  </div>
+</section>
+
+<hr class="section-divider">
+
+
+<!-- ── 360° RESULTS ── -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">360° Results</h2>
+    <div class="content has-text-centered">
+      <p>360° turntable videos of 3D objects generated by PFD.</p>
+    </div>
+
+    <div class="video-360-grid">
+      <!--
+        Add your 360° mp4 videos at ./static/videos/360_<name>.mp4
+        Duplicate/remove blocks as needed.
+      -->
+      <div class="video-360-item">
+        <video autoplay muted loop playsinline controls>
+          <source src="./static/videos/360_bunny.mp4" type="video/mp4">
+        </video>
+        <p>"A baby bunny on a stack of pancakes."</p>
+      </div>
+      <div class="video-360-item">
+        <video autoplay muted loop playsinline controls>
+          <source src="./static/videos/360_burger.mp4" type="video/mp4">
+        </video>
+        <p>"A DSLR photograph of a hamburger."</p>
+      </div>
+      <div class="video-360-item">
+        <video autoplay muted loop playsinline controls>
+          <source src="./static/videos/360_cactus.mp4" type="video/mp4">
+        </video>
+        <p>"A small saguaro cactus planted in a clay pot."</p>
+      </div>
+      <div class="video-360-item">
+        <video autoplay muted loop playsinline controls>
+          <source src="./static/videos/360_crab.mp4" type="video/mp4">
+        </video>
+        <p>"A hermit crab with a colorful shell."</p>
+      </div>
+      <div class="video-360-item">
+        <video autoplay muted loop playsinline controls>
+          <source src="./static/videos/360_cottage.mp4" type="video/mp4">
+        </video>
+        <p>"A 3D model of an adorable cottage with a thatched roof."</p>
+      </div>
+      <div class="video-360-item">
+        <video autoplay muted loop playsinline controls>
+          <source src="./static/videos/360_jay.mp4" type="video/mp4">
+        </video>
+        <p>"A blue jay on a basket of rainbow macarons."</p>
+      </div>
+      <div class="video-360-item">
+        <video autoplay muted loop playsinline controls>
+          <source src="./static/videos/360_croissant.mp4" type="video/mp4">
+        </video>
+        <p>"A delicious croissant."</p>
+      </div>
+      <div class="video-360-item">
+        <video autoplay muted loop playsinline controls>
+          <source src="./static/videos/360_cupcake.mp4" type="video/mp4">
+        </video>
+        <p>"A DSLR photograph of a beautifully decorated cupcake."</p>
+      </div>
+      <div class="video-360-item">
+        <video autoplay muted loop playsinline controls>
+          <source src="./static/videos/360_pineapple.mp4" type="video/mp4">
+        </video>
+        <p>"A pineapple."</p>
       </div>
     </div>
   </div>
 </section>
 
+<hr class="section-divider">
 
-<!-- BibTeX -->
+
+<!-- ── COMPARISON ── -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Qualitative Comparison</h2>
+    <div class="content has-text-centered">
+      <p>PFD vs. SDS, SDI, VSD, and CSD baselines.</p>
+    </div>
+
+    <!--
+      Place Figure 5 from the paper at ./static/images/fig_comparison.png
+      (the 2-row qualitative comparison figure)
+    -->
+    <div class="has-text-centered">
+      <img src="./static/images/fig_comparison.png"
+           style="width:100%; border-radius:6px;"
+           alt="Qualitative comparison: SDS, SDI, VSD, CSD, PFD" />
+      <p style="font-size:13px; color:#555; margin-top:0.5rem;">
+        <strong>Figure 5.</strong> Qualitative comparison on text-to-3D generation.
+        PFD (rightmost column) produces sharper geometry and richer texture than all baselines.
+      </p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+
+<!-- ── BIBTEX ── -->
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
@@ -190,6 +485,7 @@
 }</code></pre>
   </div>
 </section>
+
 
 </body>
 </html>
