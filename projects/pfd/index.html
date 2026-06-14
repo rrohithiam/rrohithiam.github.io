@@ -22,6 +22,22 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
 
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+  renderMathInElement(document.body, {
+  delimiters: [
+  {left: "$$", right: "$$", display: true},
+  {left: "\\[", right: "\\]", display: true},
+  {left: "\\(", right: "\\)", display: false}
+  ],
+  throwOnError: false
+  });
+  });
+  </script>
+
   <style>
     .section-divider { border: none; border-top: 1px solid #e8e8e8; margin: 0; }
 
@@ -126,10 +142,15 @@
           </div>
  
           <div class="is-size-6 publication-authors" style="margin-top:0.6rem; line-height:1.8;">
-            <span class="author-block"><sup>1</sup>Department of Physics, IIT Madras</span><br>
-            <span class="author-block"><sup>2</sup>Wadhwani School of Data Science and AI, IIT Madras</span><br>
-            <span class="author-block"><sup>3</sup>Department of Electrical Engineering, IIT Madras</span>
+          <div>
+            <sup>1</sup>Department of Physics, IIT Madras
+            &nbsp;&nbsp;&nbsp;
+            <sup>2</sup>Wadhwani School of Data Science and AI, IIT Madras
           </div>
+          <div>
+            <sup>3</sup>Department of Electrical Engineering, IIT Madras
+          </div>
+        </div>
  
           <div class="column has-text-centered" style="margin-top:0.5rem;">
             <div class="publication-links">
@@ -200,54 +221,58 @@
 <hr class="section-divider">
 
 <section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Key Observation</h2>
+<div class="container is-max-desktop">
 
-    <div class="content has-text-justified">
-      <p>
-        The central observation motivating PFD concerns the DDIM posterior mean estimator.
-        Given a noisy observation <strong>x<sub>t</sub></strong>, the standard estimate of the
-        clean sample is:
-      </p>
-      <p style="text-align:center; font-family: 'Castoro', serif; font-size: 15px; color:#333; margin: 0.5rem 0 1rem;">
-        𝔼[<strong>x</strong><sub>0</sub> | <strong>x</strong><sub>t</sub>]
-        = <strong>x̃</strong><sub>t</sub> − σ<sub>t</sub> ε<sub>φ</sub>(<strong>x</strong><sub>t</sub>, t)
-      </p>
-      <p>
-        We show this is <em>mathematically equivalent to a single explicit forward Euler
-        discretization step</em> of the DDIM Probability-Flow ODE, evaluated at
-        (<strong>x</strong><sub>t</sub>, t) and integrating along the reverse-time trajectory from
-        <em>t</em> to 0 with step size Δσ = −σ<sub>t</sub>. In other words, the posterior mean
-        is not an exact denoiser — it is a first-order numerical approximation of a continuous ODE,
-        with all the truncation error that entails.
-      </p>
-      <p>
-        SDS builds its gradient on this estimate, and SDI improves the forward pass with DDIM
-        inversion but <em>still</em> uses this single-step approximation in the reverse pass.
-        Both are therefore fundamentally limited by this coarse discretization.
-        The natural fix is to replace the single Euler step with exact numerical integration of
-        the PF-ODE in both directions — which is precisely what PFD does.
-      </p>
-    </div>
+<h2 class="title is-3 has-text-centered">Key Observation</h2>
 
-    <!-- Figure 2: gradient comparison -->
-    <div class="has-text-centered" style="margin: 1.5rem 0;">
-      <!--
-        Place Figure 2 from the paper at ./static/images/fig_gradients.png
-      -->
-      <img src="./static/images/fig_gradients.png"
-           style="width:100%; border-radius:6px;"
-           alt="Comparison of SDS, SDI, and PFD gradient estimators" />
-      <p style="font-size:13px; color:#555; margin-top:0.6rem;">
-        <strong>Figure 1.</strong>
-        (a) <strong>SDS</strong>: noisy sample via Gaussian perturbation; reverse via single Euler step (posterior mean).
-        (b) <strong>SDI</strong>: forward via DDIM inversion; reverse still a single Euler step.
-        (c) <strong>PFD (Ours)</strong>: both forward and reverse via exact PF-ODE integration,
-        eliminating the posterior mean approximation entirely.
-      </p>
-    </div>
+<div class="content has-text-justified">
 
-  </div>
+<p>
+The starting point of PFD is a simple but important observation about the DDIM
+posterior mean estimator. Given a noisy sample \( \mathbf{x}_t \), the standard
+estimate of the clean sample is
+</p>
+
+<div class="has-text-centered" style="margin:1.5rem 0;">
+$$
+\mathbb{E}\!\left[\mathbf{x}_0 \mid \mathbf{x}_t\right]
+=
+\tilde{\mathbf{x}}_t
+-
+\sigma_t \epsilon_\phi(\mathbf{x}_t,t).
+$$
+</div>
+
+<p>
+We show that this estimator is mathematically equivalent to a single explicit Euler discretization step of the DDIM Probability-Flow ODE, evaluated at
+\( (\mathbf{x}_t,t) \) and integrated along the reverse-time trajectory from \( t \) to \( 0 \) with step size \( \Delta \sigma = -\sigma_t \).
+</p>
+
+<p>
+This perspective reveals a common formulation underlying both SDS and SDI. While SDI replaces the noisy forward perturbation used in SDS with DDIM inversion, 
+both methods still rely on exactly the same single-step Euler approximation when traversing the reverse trajectory. Once viewed through this lens, a natural question arises: 
+if the posterior mean is merely a single Euler step of the PF-ODE, why stop at one step? Why not follow the underlying dynamics more faithfully by integrating the PF-ODE itself?
+
+This is precisely the idea behind PFD. As illustrated below, SDS and SDI approximate the reverse trajectory using a single discretization step, whereas PFD replaces 
+the single-step approximation with exact ODE solution. But why should this lead to better algorithm? We will see that in the next section.
+</div>
+
+<div class="has-text-centered" style="margin:2rem 0;">
+<img src="./static/images/fig_gradients.png"
+style="width:100%; border-radius:6px;"
+alt="Comparison of SDS, SDI, and PFD gradient estimators">
+
+<p style="font-size:13px; color:#555; margin-top:0.75rem;">
+<strong>Figure 1.</strong>
+(a) <strong>SDS</strong>: noisy sample via Gaussian perturbation; reverse via single Euler step (posterior mean).
+(b) <strong>SDI</strong>: forward via DDIM inversion; reverse still a single Euler step.
+(c) <strong>PFD (Ours)</strong>: both forward and reverse via exact PF-ODE integration,
+eliminating the posterior mean approximation entirely.
+</p>
+
+</div>
+
+</div>
 </section>
 
 <hr class="section-divider">
