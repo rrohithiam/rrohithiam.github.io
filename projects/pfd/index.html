@@ -221,13 +221,10 @@
               is prone to severe mode collapse, frequently yielding over-smoothed and over-saturated results.
               Although recent advancements, such as Score Distillation via Inversion (SDI), mitigate these
               artifacts and produce visually sharper models, they ultimately fail to faithfully capture the
-              full target distribution.
-            </p>
-            <p>
-              In this work, we show that the bottleneck limiting the sampling capacity of SDI stems from
-              its reliance on the posterior mean estimator, which is mathematically equivalent to a single-step
-              Euler approximation of the deterministic reverse DDIM trajectory. To address this, we propose
-              <strong>Probability-Flow Distillation (PFD)</strong>, replacing this approximation with exact
+              full target distribution. In this work, we show that the bottleneck limiting the sampling capacity 
+              of SDI stems from its reliance on the posterior mean estimator, which is mathematically equivalent 
+              to a single-step Euler approximation of the deterministic reverse DDIM trajectory. To address this, 
+              we propose <strong>Probability-Flow Distillation (PFD)</strong>, replacing this approximation with exact
               integration of the PF-ODE. We establish that PFD corresponds exactly to a Wasserstein gradient
               flow, inducing principled distribution-matching dynamics. PFD synthesizes 3D assets with
               fine-grained, high-fidelity details and achieves improved quality compared to existing methods.
