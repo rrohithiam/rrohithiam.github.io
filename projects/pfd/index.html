@@ -242,7 +242,7 @@
       <h2 class="title is-3 has-text-centered">Key Observation</h2>
       <div class="content has-text-justified">
         <p>
-          The starting point of PFD is a simple but important observation about the DDIM
+          The starting point of PFD is a simple observation about the DDIM
           posterior mean estimator. Given a noisy sample \( \mathbf{x}_t \), the standard
           estimate of the clean sample is
         </p>
@@ -257,14 +257,11 @@
         </p>
 
         <p>
-          This perspective reveals a common formulation underlying both SDS and SDI. While SDI replaces the noisy forward perturbation used in SDS with DDIM inversion,
-          both methods still rely on exactly the same single-step Euler approximation when traversing the reverse trajectory. Once viewed through this lens, a natural question arises:
-          if the posterior mean is merely a single Euler step of the PF-ODE, why stop at one step? Why not follow the underlying dynamics more faithfully by integrating the PF-ODE itself?
-        </p>
-
-        <p>
-          This is precisely the idea behind PFD. As illustrated below, SDS and SDI approximate the reverse trajectory using a single discretization step, whereas PFD replaces
-          the single-step approximation with exact ODE solution. But why should this lead to better algorithm? We will see that in the next section.
+          This perspective reveals a common ground in the gradient estimator used by both SDS and SDI. While SDI replaces the noisy forward perturbation 
+          used in SDS with DDIM inversion, both methods still rely on exactly the same single-step Euler approximation when traversing the reverse trajectory. 
+          Once viewed through this lens, a natural question arises: if the posterior mean is merely a single Euler step of the PF-ODE, why stop at one step? 
+          Why not integrate the PF-ODE itself exactly (at least in theory)? This is precisely the idea behind PFD, as illustrated below.
+           But why should this lead to a better algorithm? Continue reading to find out!
         </p>
 
         <div class="has-text-centered" style="margin:2rem 0;">
