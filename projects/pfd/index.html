@@ -219,34 +219,24 @@
 </section>
 
 <hr class="section-divider">
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Key Observation</h2>
+    <div class="content has-text-justified">
+    <p>
+    The starting point of PFD is a simple but important observation about the DDIM
+    posterior mean estimator. Given a noisy sample \( \mathbf{x}_t \), the standard
+    estimate of the clean sample is
+    </p>
 
-<section class="section">
-<div class="container is-max-desktop">
+    <div class="has-text-centered" style="margin:1.5rem 0;">
+    \[ \mathbb{E}\!\left[\mathbf{x}_0 \mid \mathbf{x}_t\right] = \tilde{\mathbf{x}}_t - \sigma_t \epsilon_\phi(\mathbf{x}_t,t). \]
+    </div>
 
-<h2 class="title is-3 has-text-centered">Key Observation</h2>
-
-<div class="content has-text-justified">
-
-<p>
-The starting point of PFD is a simple but important observation about the DDIM
-posterior mean estimator. Given a noisy sample \( \mathbf{x}_t \), the standard
-estimate of the clean sample is
-</p>
-
-<div class="has-text-centered" style="margin:1.5rem 0;">
-$$
-\mathbb{E}\!\left[\mathbf{x}_0 \mid \mathbf{x}_t\right]
-=
-\tilde{\mathbf{x}}_t
--
-\sigma_t \epsilon_\phi(\mathbf{x}_t,t).
-$$
-</div>
-
-<p>
-We show that this estimator is mathematically equivalent to a single explicit Euler discretization step of the DDIM Probability-Flow ODE, evaluated at
-\( (\mathbf{x}_t,t) \) and integrated along the reverse-time trajectory from \( t \) to \( 0 \) with step size \( \Delta \sigma = -\sigma_t \).
-</p>
+    <p>
+    We show that this estimator is mathematically equivalent to a single explicit Euler discretization step of the DDIM Probability-Flow ODE, evaluated at
+    \( (\mathbf{x}_t,t) \) and integrated along the reverse-time trajectory from \( t \) to \( 0 \) with step size \( \Delta \sigma = -\sigma_t \).
+    </p>
 
 <p>
 This perspective reveals a common formulation underlying both SDS and SDI. While SDI replaces the noisy forward perturbation used in SDS with DDIM inversion, 
