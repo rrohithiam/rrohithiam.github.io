@@ -358,12 +358,6 @@
 
         </p>
         <p>
-          To make the method tractable, we employ approximations akin to those used implicitly in
-          prior work. we use standard DDIM inversion as a surrogate for the forward PF-ODE and as a consequence we can operate in the single-particle regime. 
-          These approximatons are justified in the paper. Despite this, PFD achieves results <strong>competitive with
-          VSD</strong> — the current state-of-the-art, which requires
-          LoRA fine-tuning of the diffusion model and beat VSD with similar approximations made which is CSD, and obviously performs better than SDS and SDI. See the qualitative comparison below
-
           To make the method tractable for 3D generation, we employ an approximation used implicitly in prior work. 
           In particular, we use standard DDIM inversion as a surrogate for the forward PF-ODE, allowing us to operate 
           in the single-particle regime. The rationale behind these approximations is discussed the paper. Despite these approximations, 
@@ -371,17 +365,8 @@
           of the diffusion model. PFD also compares favorably to CSD, which can be viewed as an approximation to VSD and relies on 
           approximations similar to those we employ when adapting the general PFD framework to text-to-3D generation. Moreover, 
           PFD consistently produces stronger results than SDS and SDI. A qualitative comparison is shown below.
-
         </p>
-
-        <h3 class="title is-4" style="margin-top:2.5rem;">Qualitative Comparison</h3>
-        <div class="content has-text-justified">
-          <p>
-            Comparison against SDS, SDI, VSD, and CSD across a range of text prompts.
-            PFD (rightmost) consistently produces sharper geometry and richer texture than SDS and SDI,
-            and is competitive with VSD.
-          </p>
-        </div>
+        
         <div class="has-text-centered">
           <img src="./static/images/fig_comparison.png"
               style="width:100%; border-radius:6px;"
