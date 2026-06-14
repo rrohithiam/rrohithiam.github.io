@@ -7,6 +7,7 @@ permalink: /publication/preprint-pfd
 date: 2026-05-09
 venue: 'arXiv'
 paperurl: 'https://doi.org/10.48550/arXiv.2605.09071'
+project: 'https://rrohithiam.github.io/projects/pfd/'
 image: 'pfd.png'
 image_width: 200
 description: "We introduce Probability-Flow Distillation (PFD), a principled extension of SDS-based text-to-3D optimization. By connecting SDI to a first-order approximation of the reverse DDIM trajectory and deriving PFD as an exact Wasserstein gradient flow, we obtain improved distribution matching and higher-fidelity 3D generation."

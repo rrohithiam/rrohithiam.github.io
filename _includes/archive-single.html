@@ -90,6 +90,11 @@
                 <a href="{{ post.paperurl }}" class="pub-link" target="_blank" rel="noopener noreferrer">paper</a>
               {% endif %}
 
+              {% if post.project %}
+                <span style="opacity: 0.4; margin: 0 2px;">|</span>
+                <a href="{{ post.project }}" class="pub-link" target="_blank" rel="noopener noreferrer">project</a>
+              {% endif %}
+
               {% if post.bibtex %}
                 <span style="opacity: 0.4; margin: 0 2px;">|</span>
                 <a href="#" class="pub-link bibtex-toggle"
