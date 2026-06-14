@@ -250,7 +250,7 @@
         <div class="has-text-centered" style="margin:1.5rem 0;">
         \[
         \mathbb{E}\!\left[\mathbf{x}_0 \mid \mathbf{x}_t\right]
-        = \tilde{\mathbf{x}}_t - \sigma_t \epsilon_\phi(\mathbf{x}_t,t) \qquad \tilde{\mathbf{x}}_t = \frac{\mathbf{x}_t}{\sqrt{\alpha_t}} \] 
+        = \tilde{\mathbf{x}}_t - \sigma_t \epsilon_\phi(\mathbf{x}_t,t) \qquad \tilde{\mathbf{x}}_t = \frac{\mathbf{x}_t}{\sqrt{\alpha_t}}.\] 
         </div>
 
         <p>
@@ -297,7 +297,7 @@
           the generated distribution and the target diffusion prior:
         </p>
         <div class="has-text-centered" style="margin:1.5rem 0;">
-          \[ \mathbb{E}_t[\Delta_t] = \nabla_{\mathbf{x}} \frac{\delta \mathcal{F}[q_0]}{\delta q_0(\mathbf{x})} \]
+          \[ \mathbb{E}_t[\Delta_t] = \nabla_{\mathbf{x}} \frac{\delta \mathcal{F}[q_0]}{\delta q_0(\mathbf{x})}, \]
         </div>
         <p>
           where \( \mathcal{F}[q_0] = \mathbb{E}_t[w(t) D_{\mathrm{KL}}(q_t \,\|\, p_t)] \). 
@@ -327,14 +327,14 @@
         </p>
       </div>
       
-      <div style="background:#fffbf0; border-left:4px solid #f5a623; border-radius:4px;
+      <div style="background:#fff5f5; border-left:4px solid #e74c3c; border-radius:4px;
                     padding:14px 18px; margin: 1.5rem 0;">
           <span style="font-family:monospace; font-size:11px; font-weight:700;
-                       letter-spacing:0.1em; text-transform:uppercase; color:#c47d00;
+                       letter-spacing:0.1em; text-transform:uppercase; color:#c0392b;
                        display:block; margin-bottom:6px;">Note</span>
           <p style="margin:0; font-size:14.5px; line-height:1.6; color:#444;">
             In this toy example, a secondary network is trained to learn the score of the current particle distribution
-             in order to solve the forward PF-ODE in both SDI and PFD. This differs from the SDI algorithm as originally
+             in order to solve the forward PF-ODE in both SDI and PFD. This differs slightly from the SDI algorithm as originally
               described in their paper; we refer interested readers to our paper for a detailed discussion.
           </p>
       </div>
@@ -350,29 +350,47 @@
 
       <div class="content has-text-justified">
         <p>
-          We apply PFD to text-to-3D generation as a natural testbed for the algorithm.
-          It is important to emphasize: <strong>text-to-3D is not the primary contribution of this
-          work</strong>. The core contribution is the PFD algorithm itself — a general procedure for
-          optimizing parameters of any differentiable representation by inducing Wasserstein gradient
-          flow. Text-to-3D is simply a compelling and natural domain to demonstrate the power of the
-          method.
+          We apply PFD to text-to-3D generation as a natural testbed for the algorithm. We would like to emphasize, 
+          however, that text-to-3D is not the primary contribution of this work. Rather, the main contribution 
+          lies in the theoretical insights, the unifying perspective on existing methods, the PFD algorithm itself, and the accompanying proof. 
+          We hope these ideas provide a foundation that the community can build upon. Text-to-3D serves as a compelling application domain, 
+          particularly since the line of work leading up to PFD has been primarily focused on text-to-3D generation.
+
         </p>
         <p>
           To make the method tractable, we employ approximations akin to those used implicitly in
-          prior work. Rather than maintaining a full particle ensemble and learning the score of the
-          current particle distribution (as the exact algorithm requires), we use standard DDIM
-          inversion as a surrogate for the forward PF-ODE and operate in the single-particle regime
-          (N = 1). These approximations substantially cut computational cost while preserving the
-          key distributional benefits of PFD.
+          prior work. we use standard DDIM inversion as a surrogate for the forward PF-ODE and as a consequence we can operate in the single-particle regime. 
+          These approximatons are justified in the paper. Despite this, PFD achieves results <strong>competitive with
+          VSD</strong> — the current state-of-the-art, which requires
+          LoRA fine-tuning of the diffusion model and beat VSD with similar approximations made which is CSD, and obviously performs better than SDS and SDI. See the qualitative comparison below
+
+          To make the method tractable for 3D generation, we employ an approximation used implicitly in prior work. 
+          In particular, we use standard DDIM inversion as a surrogate for the forward PF-ODE, allowing us to operate 
+          in the single-particle regime. The rationale behind these approximations is discussed the paper. Despite these approximations, 
+          PFD achieves results <strong>competitive with VSD</strong>, the current state-of-the-art method, which requires LoRA fine-tuning 
+          of the diffusion model. PFD also compares favorably to CSD, which can be viewed as an approximation to VSD and relies on 
+          approximations similar to those we employ when adapting the general PFD framework to text-to-3D generation. Moreover, 
+          PFD consistently produces stronger results than SDS and SDI. A qualitative comparison is shown below.
+
         </p>
-        <p>
-          Despite this crude instantiation, PFD achieves results <strong>competitive with
-          VSD</strong> — the current state-of-the-art distribution-matching method, which requires
-          LoRA fine-tuning of the diffusion model and ~45 GB VRAM — while maintaining memory usage
-          comparable to SDI (~36 GB). PFD also substantially outperforms SDI in texture fidelity
-          and perceptual quality, particularly at higher resolutions where the gap becomes
-          pronounced.
-        </p>
+
+        <h3 class="title is-4" style="margin-top:2.5rem;">Qualitative Comparison</h3>
+        <div class="content has-text-justified">
+          <p>
+            Comparison against SDS, SDI, VSD, and CSD across a range of text prompts.
+            PFD (rightmost) consistently produces sharper geometry and richer texture than SDS and SDI,
+            and is competitive with VSD.
+          </p>
+        </div>
+        <div class="has-text-centered">
+          <img src="./static/images/fig_comparison.png"
+              style="width:100%; border-radius:6px;"
+              alt="Qualitative comparison: SDS, SDI, VSD, CSD, PFD" />
+          <p style="font-size:13px; color:#555; margin-top:0.6rem;">
+            <strong>Figure 3.</strong> Qualitative comparison on text-to-3D generation.
+            Columns left to right: SDS, SDI, VSD, CSD, <strong>PFD (Ours)</strong>.
+          </p>
+        </div>
 
         <div style="background:#fffbf0; border-left:4px solid #f5a623; border-radius:4px;
                     padding:14px 18px; margin: 1.5rem 0;">
@@ -380,14 +398,12 @@
                        letter-spacing:0.1em; text-transform:uppercase; color:#c47d00;
                        display:block; margin-bottom:6px;">A note to the community</span>
           <p style="margin:0; font-size:14.5px; line-height:1.6; color:#444;">
-            The text-to-3D implementation presented here is deliberately minimal — many
-            hyperparameters and design choices (ODE solver order, timestep scheduling, representation
-            architecture, guidance strategies, multi-view consistency) are largely untouched.
-            We strongly encourage the community to build on PFD: better instantiations are likely to
-            yield substantially improved results. See the <a href="https://arxiv.org/abs/2605.09071"
-            target="_blank">paper</a> for a detailed discussion of future directions, including more
-            efficient PF-ODE solvers, trajectory distillation, and extensions beyond the
-            single-particle regime.
+            The text-to-3D implementation presented here is deliberately minimal. Many design choices 
+            and avenues for improvement &mdash; including the ODE solver, representation architecture, multi-view 
+            consistency mechanisms, and the multi-particle setting &mdash; remain largely unexplored. Consequently, 
+            the current implementation still suffers from issues such as the Janus problem, unintended scene expansions, 
+            and floaters. We strongly encourage the community to build upon PFD, as better instantiations are likely to 
+            yield substantially improved results.
           </p>
         </div>
       </div>
@@ -430,24 +446,6 @@
           </video>
           <p>"A 3D model of an adorable cottage with a thatched roof."</p>
         </div>
-      </div>
-
-      <h3 class="title is-4" style="margin-top:2.5rem;">Qualitative Comparison</h3>
-      <div class="content has-text-justified">
-        <p>
-          Comparison against SDS, SDI, VSD, and CSD across a range of text prompts.
-          PFD (rightmost) consistently produces sharper geometry and richer texture than SDS and SDI,
-          and is competitive with VSD at a fraction of the memory cost.
-        </p>
-      </div>
-      <div class="has-text-centered">
-        <img src="./static/images/fig_comparison.png"
-             style="width:100%; border-radius:6px;"
-             alt="Qualitative comparison: SDS, SDI, VSD, CSD, PFD" />
-        <p style="font-size:13px; color:#555; margin-top:0.6rem;">
-          <strong>Figure 3.</strong> Qualitative comparison on text-to-3D generation.
-          Columns left to right: SDS, SDI, VSD, CSD, <strong>PFD (Ours)</strong>.
-        </p>
       </div>
 
     </div>
