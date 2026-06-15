@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Probability-Flow Distillation: Exact Wasserstein Gradient Flow for High-Fidelity 3D Generation.">
+  <meta name="keywords" content="Probability-Flow Distillation, PFD, 3D Generation, Score Distillation, Wasserstein, NeRF, text-to-3D">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Probability-Flow Distillation</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+
+  <style>
+    .section-divider {
+      border: none;
+      border-top: 1px solid #e8e8e8;
+      margin: 0;
+    }
+
+    .tldr-box {
+      background: #f5f8ff;
+      border-left: 4px solid #3273dc;
+      border-radius: 4px;
+      padding: 14px 18px;
+      margin-bottom: 1.4rem;
+      text-align: left;
+    }
+
+    .tldr-label {
+      font-family: monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #3273dc;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .idea-card {
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      padding: 18px 20px;
+      height: 100%;
+    }
+
+    .idea-card p.card-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+
+    .idea-card p.card-body {
+      font-size: 14.5px;
+      color: #444;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .idea-num {
+      color: #3273dc;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 1rem;
+    }
+
+    .video-item {
+      text-align: center;
+    }
+
+    .video-item video {
+      width: 100%;
+      border-radius: 6px;
+    }
+
+    .video-item p {
+      font-style: italic;
+      font-size: 12px;
+      color: #555;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 600px) {
+      .video-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="https://rrohithiam.github.io">
+          <span class="icon"><i class="fas fa-home"></i></span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+
+            <h1 class="title is-1 publication-title">
+              Quantum computing for molecular vibrational energies: A comprehensive study
+            </h1>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                Somasundaram R<sup>1</sup>
+              </span>
+              &nbsp;&nbsp;
+              <span class="author-block">
+                Jayaharish R<sup>1,2</sup>
+              </span>
+              &nbsp;&nbsp;
+              <span class="author-block">
+                <a href="https://rrohithiam.github.io">Rohith Ramanan</a><sup>1,2</sup>
+              </span>
+              &nbsp;&nbsp;
+              <span class="author-block">
+                Chandra Chowdhury<sup>3</sup>
+              </span>
+            </div>
+
+            <div class="is-size-6 publication-authors" style="margin-top:0.6rem; line-height:1.8;">
+              <div>
+                <sup>1</sup>Department of Physics, IIT Madras
+                &nbsp;&nbsp;&nbsp;
+                <sup>2</sup>Wadhwani School of Data Science and AI, IIT Madras
+              </div>
+              <div>
+                <sup>3</sup>Advanced Materials Laboratory, CSIR-Central Leather Research Institute
+              </div>
+            </div>
+
+            <div class="column has-text-centered" style="margin-top:0.5rem;">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2605.09071" target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a class="external-link button is-normal is-rounded is-dark"
+                     style="opacity:0.55; cursor:default;" onclick="return false;">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code (coming soon)</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+
+          <div class="tldr-box">
+            <span class="tldr-label">TL;DR</span>
+            <p style="margin:0; font-size:15px; line-height:1.6; color:#333;">
+              SDS-style methods enable sampling in parameter space via optimization but suffer from
+              mode collapse and biased gradients; we propose Probability-Flow Distillation (PFD),
+              inducing Wasserstein gradient flow for improved distribution matching.
+            </p>
+          </div>
+
+          <div class="content has-text-justified">
+            <p>
+              Score Distillation Sampling (SDS) and its variants have been widely used for text-to-3D
+              generation by distilling 2D image diffusion priors. However, the standard SDS objective
+              is prone to severe mode collapse, frequently yielding over-smoothed and over-saturated results.
+              Although recent advancements, such as Score Distillation via Inversion (SDI), mitigate these
+              artifacts and produce visually sharper models, they ultimately fail to faithfully capture the
+              full target distribution. In this work, we show that the bottleneck limiting the sampling capacity 
+              of SDI stems from its reliance on the posterior mean estimator, which is mathematically equivalent 
+              to a single-step Euler approximation of the deterministic reverse DDIM trajectory. To address this, 
+              we propose <strong>Probability-Flow Distillation (PFD)</strong>, replacing this approximation with exact
+              integration of the PF-ODE. We establish that PFD corresponds exactly to a Wasserstein gradient
+              flow, inducing principled distribution-matching dynamics. PFD synthesizes 3D assets with
+              fine-grained, high-fidelity details and achieves improved quality compared to existing methods.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Key Observation</h2>
+      <div class="content has-text-justified">
+        <p>
+          The starting point of PFD is a simple observation about the DDIM
+          posterior mean estimator. Given a noisy sample \( \mathbf{x}_t \), the standard
+          estimate of the clean sample is
+        </p>
+
+        <div class="has-text-centered" style="margin:1.5rem 0;">
+        \[
+        \mathbb{E}\!\left[\mathbf{x}_0 \mid \mathbf{x}_t\right]
+        = \tilde{\mathbf{x}}_t - \sigma_t \epsilon_\phi(\mathbf{x}_t,t) \qquad \tilde{\mathbf{x}}_t = \frac{\mathbf{x}_t}{\sqrt{\alpha_t}}.\] 
+        </div>
+
+        <p>
+          We show that this estimator is mathematically equivalent to a single explicit Euler discretization step of the DDIM Probability-Flow ODE, evaluated at
+          \( (\mathbf{x}_t,t) \) and integrated along the reverse-time trajectory from \( t \) to \( 0 \) with step size \( \Delta \sigma = -\sigma_t \).
+        </p>
+
+        <p>
+          This perspective reveals a common ground in the gradient estimator used by both SDS and SDI. While SDI replaces the noisy forward perturbation 
+          used in SDS with DDIM inversion, both methods still rely on exactly the same single-step Euler approximation when traversing the reverse trajectory. 
+          Once viewed through this lens, a natural question arises: if the posterior mean is merely a single Euler step of the PF-ODE, why stop at one step? 
+          Why not integrate the PF-ODE itself exactly (at least in theory)? This is precisely the idea behind PFD, as illustrated below.
+           But why should this lead to a better algorithm? Continue reading to find out!
+        </p>
+
+        <div class="has-text-centered" style="margin:2rem 0;">
+          <img src="./static/images/fig_gradients.png"
+               style="width:100%; border-radius:6px;"
+               alt="Comparison of SDS, SDI, and PFD gradient estimators">
+
+          <p style="font-size:13px; color:#555; margin-top:0.75rem;">
+            <strong>Figure 1.</strong>
+            (a) <strong>SDS</strong>: noisy sample via Gaussian perturbation; reverse via single Euler step (posterior mean).
+            (b) <strong>SDI</strong>: forward via DDIM inversion; reverse still a single Euler step.
+            (c) <strong>PFD (Ours)</strong>: both forward and reverse via exact PF-ODE integration,
+            eliminating the posterior mean approximation entirely.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Probability-Flow Distillation</h2>
+
+      <div class="content has-text-justified">
+        <p>
+          Beyond being a natural extension to SDI, PFD has a deeper theoretical interpretation.
+          Our main theoretical result shows that the PFD gradient <strong>exactly matches the
+          Wasserstein gradient</strong> of a time-averaged KL divergence functional between
+          the generated distribution and the target diffusion prior:
+        </p>
+        <div class="has-text-centered" style="margin:1.5rem 0;">
+          \[ \mathbb{E}_t[\Delta_t] = \nabla_{\mathbf{x}} \frac{\delta \mathcal{F}[q_0]}{\delta q_0(\mathbf{x})}, \]
+        </div>
+        <p>
+          where \( \mathcal{F}[q_0] = \mathbb{E}_t[w(t) D_{\mathrm{KL}}(q_t \,\|\, p_t)] \). 
+          In other words, the particle dynamics induced by PFD follow a <em>gradient flow in
+          Wasserstein space</em>, with a global minimum at \( q_0 = p_0 \), i.e., when the
+          generated distribution matches the target distribution.
+        </p>
+        <p>
+          This perspective also helps explain an important empirical difference between SDS, SDI, and PFD. SDS is fundamentally mode-seeking, 
+          while SDI alleviates this behavior to some extent but still struggles to faithfully capture the full target distribution. 
+          In contrast, PFD performs distribution matching through its underlying Wasserstein gradient flow. The simple 2D experiment below 
+          provides a visual illustration of this behavior.
+        </p>
+      </div>
+
+
+      <div class="has-text-centered" style="margin: 1.5rem 0;">
+        <img src="./static/images/fig_particles.png"
+             style="width:69%; border-radius:6px;"
+             alt="2D particle evolution: SDS vs SDI vs PFD on concentric circles" />
+        <p style="font-size:13px; color:#555; margin-top:0.6rem;">
+          <strong>Figure 2.</strong> Particle evolution on a concentric circles target distribution
+          (columns: optimization steps \( \tau \) = 0, 50, 100, 150).
+          (a) <strong>SDS</strong> collapses to a single mode.
+          (b) <strong>SDI</strong> partially recovers the support but misses fine structure.
+          (c) <strong>PFD (Ours)</strong> faithfully reconstructs the full multi-modal distribution.
+        </p>
+      </div>
+      
+      <div style="background:#fff5f5; border-left:4px solid #e74c3c; border-radius:4px;
+                    padding:14px 18px; margin: 1.5rem 0;">
+          <span style="font-family:monospace; font-size:11px; font-weight:700;
+                       letter-spacing:0.1em; text-transform:uppercase; color:#c0392b;
+                       display:block; margin-bottom:6px;">Note</span>
+          <p style="margin:0; font-size:14.5px; line-height:1.6; color:#444;">
+            In this toy example, a secondary network is trained to learn the score of the current particle distribution
+             in order to solve the forward PF-ODE in both SDI and PFD. This differs slightly from the SDI algorithm as originally
+              described in their paper; we refer interested readers to our paper for a detailed discussion.
+          </p>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Text-to-3D Generation</h2>
+
+      <div class="content has-text-justified">
+        <p>
+          We apply PFD to text-to-3D generation as a natural testbed for the algorithm. We would like to emphasize, 
+          however, that text-to-3D is not the primary contribution of this work. Rather, the main contribution 
+          lies in the theoretical insights, the unifying perspective on existing methods, the PFD algorithm itself, and the accompanying proof. 
+          We hope these ideas provide a foundation that the community can build upon. Text-to-3D serves as a compelling application domain, 
+          particularly since the line of work leading up to PFD has been primarily focused on text-to-3D generation.
+
+        </p>
+        <p>
+          To make the method tractable for 3D generation, we employ an approximation used implicitly in prior work. 
+          In particular, we use standard DDIM inversion as a surrogate for the forward PF-ODE, allowing us to operate 
+          in the single-particle regime. The rationale behind these approximations is discussed the paper. Despite these approximations, 
+          PFD achieves results competitive with VSD, the current state-of-the-art method, which requires LoRA fine-tuning 
+          of the diffusion model. PFD also compares favorably to CSD, which can be viewed as an approximation to VSD and relies on 
+          approximations similar to those we employ when adapting the general PFD framework to text-to-3D generation. Moreover, 
+          PFD consistently produces stronger results than SDS and SDI. A qualitative comparison is shown below.
+        </p>
+
+        <div class="has-text-centered">
+          <img src="./static/images/fig_comparison.png"
+              style="width:100%; border-radius:6px;"
+              alt="Qualitative comparison: SDS, SDI, VSD, CSD, PFD" />
+          <p style="font-size:13px; color:#555; margin-top:0.6rem;">
+            <strong>Figure 3.</strong> Qualitative comparison on text-to-3D generation.
+            Columns left to right: SDS, SDI, VSD, CSD, <strong>PFD (Ours)</strong>.
+          </p>
+        </div>
+
+        <div style="background:#fffbf0; border-left:4px solid #f5a623; border-radius:4px;
+                    padding:14px 18px; margin: 1.5rem 0;">
+          <span style="font-family:monospace; font-size:11px; font-weight:700;
+                       letter-spacing:0.1em; text-transform:uppercase; color:#c47d00;
+                       display:block; margin-bottom:6px;">Looking Ahead</span>
+          <p style="margin:0; font-size:14.5px; line-height:1.6; color:#444;">
+            The text-to-3D implementation presented here is deliberately minimal. Many design choices 
+            and avenues for improvement &mdash; including the ODE solver, representation architecture, multi-view 
+            consistency mechanisms, and the multi-particle setting &mdash; remain largely unexplored. Consequently, 
+            the current implementation still suffers from issues such as the Janus problem (See <em>"A 3D model of an adorable 
+            cottage with a thatched roof."</em> example below), unintended scene expansions (See <em>"lionfish."</em> example below), 
+            and floaters (See <em>"A DSLR photograph of a beautifully decorated cupcake."</em> example below). 
+            We strongly encourage the community to build upon this!
+          </p>
+        </div>
+      </div>
+
+      <h3 class="title is-4" style="margin-top:0.5rem;">360° Results</h3>
+      <div class="video-grid">
+        <div class="video-item">
+          <video autoplay muted loop playsinline controls>
+            <source src="./static/videos/bunny.mp4" type="video/mp4">
+          </video>
+          <p>"A baby bunny sitting on a stack of pancakes."</p>
+        </div>
+        <div class="video-item">
+          <video autoplay muted loop playsinline controls>
+            <source src="./static/videos/cactus.mp4" type="video/mp4">
+          </video>
+          <p>"A small saguaro cactus planted in a clay pot."</p>
+        </div>
+        <div class="video-item">
+          <video autoplay muted loop playsinline controls>
+            <source src="./static/videos/cupcake.mp4" type="video/mp4">
+          </video>
+          <p>"A DSLR photograph of a beautifully decorated cupcake."</p>
+        </div>
+        <div class="video-item">
+          <video autoplay muted loop playsinline controls>
+            <source src="./static/videos/hamburger.mp4" type="video/mp4">
+          </video>
+          <p>"A DSLR photograph of a hamburger."</p>
+        </div>
+        <div class="video-item">
+          <video autoplay muted loop playsinline controls>
+            <source src="./static/videos/lionfish.mp4" type="video/mp4">
+          </video>
+          <p>"A lionfish."</p>
+        </div>
+        <div class="video-item">
+          <video autoplay muted loop playsinline controls>
+            <source src="./static/videos/cottage.mp4" type="video/mp4">
+          </video>
+          <p>"A 3D model of an adorable cottage with a thatched roof."</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@misc{rrohithpfd2026,
+  title         = {Probability-Flow Distillation: Exact Wasserstein Gradient
+                   Flow for High-Fidelity 3D Generation},
+  author        = {Rohith Ramanan and A. N. Rajagopalan},
+  year          = {2026},
+  eprint        = {2605.09071},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+  url           = {https://arxiv.org/abs/2605.09071}
+}</code></pre>
+    </div>
+  </section>
+
+<footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      If you have any questions, please write to <a href="mailto:rrohith2633@gmail.com">rrohith2633@gmail.com</a>.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
