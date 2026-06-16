@@ -6,11 +6,11 @@ author_profile: true
 ---
 
 <style>
-  .pres-item { margin: 0 0 20px 0; }
-  .pres-title { font-size: 1em; font-weight: 600; margin: 8px 0 6px 0; }
-  .pres-meta { color: var(--global-text-color, inherit); opacity: 0.6; margin: 0 0 8px 0; font-size: 14px; }
-  .pres-desc { color: var(--global-text-color, inherit); margin: 0 0 10px 0; font-size: 15px; line-height: 1.5; }
-  .pres-link { text-decoration: none; font-weight: 500; font-size: 14px; }
+  .pres-item { margin: 0 0 14px 0; }
+  .pres-title { font-size: 1em; font-weight: 600; margin: 0 0 2px 0; }
+  .pres-meta { color: var(--global-text-color, inherit); opacity: 0.6; margin: 0 0 2px 0; font-size: 13px; }
+  .pres-desc { color: var(--global-text-color, inherit); margin: 0 0 4px 0; font-size: 13px; line-height: 1.5; }
+  .pres-link { text-decoration: none; font-weight: 500; font-size: 13px; }
   .pres-link:hover { text-decoration: underline !important; }
 </style>
 
