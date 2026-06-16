@@ -10,69 +10,49 @@ author_profile: true
 <div class="presentations">
 
   <div class="pres-item">
-    <div class="pres-tag opt"></div>
-    <div>
-      <p class="pres-title">Adaptive Parallel Tempering for Job Shop Scheduling</p>
-      <p class="pres-meta">B.Tech Thesis &middot; Combinatorial Optimization</p>
-      <a class="chip" href="/assets/pdfs/btech-thesis.pdf">Thesis</a>
-      <a class="chip" href="/assets/pdfs/btech-slides.pdf">Slides</a>
-    </div>
+    <p class="pres-title">Adaptive Parallel Tempering for Job Shop Scheduling</p>
+    <p class="pres-meta">B.Tech Thesis &middot; Combinatorial Optimization</p>
+    <p class="pres-desc">Developed an adaptive variant of parallel tempering for solving job shop scheduling problems, with dynamic temperature schedules tuned during the search.</p>
+    <a class="pres-link" href="/assets/pdfs/btech-thesis.pdf">thesis</a> |
+    <a class="pres-link" href="/assets/pdfs/btech-slides.pdf">slides</a>
   </div>
 
   <div class="pres-item">
-    <div class="pres-tag ml"></div>
-    <div>
-      <p class="pres-title">Extending Score Distillation via Wasserstein Gradient Flows</p>
-      <p class="pres-meta">M.Tech Thesis &middot; Generative Models</p>
-      <a class="chip" href="/assets/pdfs/mtech-thesis.pdf">Thesis</a>
-      <a class="chip" href="/assets/pdfs/mtech-slides.pdf">Slides</a>
-      <a class="chip" href="https://your-project-url.com">Project</a>
-    </div>
+    <p class="pres-title">Extending Score Distillation via Wasserstein Gradient Flows</p>
+    <p class="pres-meta">M.Tech Thesis &middot; Generative Models</p>
+    <p class="pres-desc">Reformulated score distillation sampling through the lens of Wasserstein gradient flows, yielding improved generation quality and theoretical grounding.</p>
+    <a class="pres-link" href="/assets/pdfs/mtech-thesis.pdf">thesis</a> |
+    <a class="pres-link" href="/assets/pdfs/mtech-slides.pdf">slides</a> |
+    <a class="pres-link" href="https://your-project-url.com">project</a>
   </div>
 
   <div class="pres-item">
-    <div class="pres-tag gt"></div>
-    <div>
-      <p class="pres-title">Bounded Envy-Free Cake Cutting Protocols</p>
-      <p class="pres-meta">Seminar &middot; Algorithmic Game Theory</p>
-      <a class="chip" href="/assets/pdfs/cake-cutting.pdf">Slides</a>
-    </div>
+    <p class="pres-title">Bounded Envy-Free Cake Cutting Protocols</p>
+    <p class="pres-meta">Presentation &middot; Algorithmic Game Theory</p>
+    <p class="pres-desc">Survey of protocols for fair division with bounded envy, covering Robertson–Webb query complexity and recent constructive results.</p>
+    <a class="pres-link" href="/assets/pdfs/cake-cutting.pdf">slides</a>
   </div>
 
   <div class="pres-item">
-    <div class="pres-tag mc"></div>
-    <div>
-      <p class="pres-title">Markov Chain Mixing Time on Uniform Graph Colorings</p>
-      <p class="pres-meta">Seminar &middot; Probability &amp; Algorithms</p>
-      <a class="chip" href="/assets/pdfs/mixing-time.pdf">Slides</a>
-    </div>
+    <p class="pres-title">Markov Chain Mixing Time on Uniform Graph Colorings</p>
+    <p class="pres-meta">Presentation &middot; Probability &amp; Algorithms</p>
+    <p class="pres-desc">Presentation on bounding the mixing time of Glauber dynamics for the uniform distribution over proper colorings of bounded-degree graphs.</p>
+    <a class="pres-link" href="/assets/pdfs/mixing-time.pdf">slides</a>
   </div>
 
   <div class="pres-item">
-    <div class="pres-tag fin"></div>
-    <div>
-      <p class="pres-title">Minimum Variance Sparse Portfolio Construction</p>
-      <p class="pres-meta">Seminar &middot; Mathematical Finance</p>
-      <a class="chip" href="/assets/pdfs/portfolio.pdf">Slides</a>
-    </div>
+    <p class="pres-title">Minimum Variance Sparse Portfolio Construction</p>
+    <p class="pres-meta">Presentation &middot; Mathematical Finance</p>
+    <p class="pres-desc">Overview of sparse optimization methods for constructing minimum variance portfolios under cardinality constraints, with empirical comparisons on equity data.</p>
+    <a class="pres-link" href="/assets/pdfs/portfolio.pdf">slides</a>
   </div>
 
 </div>
 
 <style>
-.presentations { margin-top: 1rem; }
-.pres-item { display: flex; gap: 14px; padding: 0.9rem 0; border-top: 1px solid #e8e8e8; }
-.pres-item:last-child { border-bottom: 1px solid #e8e8e8; }
-.pres-tag { width: 4px; flex-shrink: 0; border-radius: 0; }
-.pres-tag.opt { background: #1D9E75; }
-.pres-tag.ml  { background: #534AB7; }
-.pres-tag.gt  { background: #D85A30; }
-.pres-tag.mc  { background: #185FA5; }
-.pres-tag.fin { background: #BA7517; }
+.pres-item { margin-bottom: 1.8rem; }
 .pres-title { font-size: 15px; font-weight: 600; margin: 0 0 3px; }
-.pres-meta { font-size: 12px; color: #888; font-family: monospace; margin: 0 0 8px; }
-.chip { display: inline-block; font-size: 12px; font-weight: 500; padding: 3px 10px;
-        border-radius: 999px; border: 1px solid #ccc; color: #444;
-        text-decoration: none; margin-right: 5px; }
-.chip:hover { background: #f0f0f0; }
+.pres-meta { font-size: 13px; color: #888; margin: 0 0 6px; }
+.pres-desc { font-size: 14px; color: #444; margin: 0 0 6px; line-height: 1.6; }
+.pres-link { font-size: 14px; text-decoration: underline; color: inherit; }
 </style>
