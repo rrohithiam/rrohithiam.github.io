@@ -71,10 +71,10 @@
           <p class="pub-meta" style="margin: 0 0 8px 0; font-size: 14px;">
             {% if post.authors %}
               <span>{{ post.authors }}</span>
-              <span style="margin: 0 6px;">·</span>
+              <span style="margin: 0 6px;">&middot;</span>
             {% endif %}
             <span>{{ post.venue }}</span>
-            <span style="margin: 0 6px;">·</span>
+            <span style="margin: 0 6px;">&middot;</span>
             <span>{{ post.date | default: "1900-01-01" | date: "%b %d, %Y" }}</span>
           </p>
 
