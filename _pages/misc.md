@@ -5,6 +5,10 @@ title: "Misc."
 author_profile: true
 ---
 
+{% include base_path %}
+
+---
+
 <style>
   .pres-item { margin: 0 0 14px 0; }
   .pres-title { font-size: 1em; font-weight: 600; margin: 0 0 2px 0; display: block; }
