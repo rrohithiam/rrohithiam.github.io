@@ -16,14 +16,14 @@ author_profile: true
 
 <div class="pres-item">
   <span class="pres-title">Adaptive Parallel Tempering for Job Shop Scheduling</span>
-  <span class="pres-meta">B.Tech Thesis &middot; Combinatorial Optimization</span>
+  <span class="pres-meta">B.Tech Thesis &middot; Combinatorial Optimization &middot; MCMC</span>
   <span class="pres-desc">Developed an adaptive variant of parallel tempering for solving job shop scheduling problems, with dynamic temperature schedules tuned during the search.</span>
-  <div><a href="/assets/pdfs/btech-thesis.pdf" class="pres-link">thesis</a> <span style="opacity:0.4;">|</span> <a href="/assets/pdfs/btech-slides.pdf" class="pres-link">slides</a></div>
+  <div><a href="/files/bachelors_thesis.pdf" class="pres-link">thesis</a> <span style="opacity:0.4;">|</span> <a href="/assets/pdfs/btech-slides.pdf" class="pres-link">slides</a></div>
 </div>
 
 <div class="pres-item">
   <span class="pres-title">Extending Score Distillation via Wasserstein Gradient Flows</span>
-  <span class="pres-meta">M.Tech Thesis &middot; Generative Models</span>
+  <span class="pres-meta">M.Tech Thesis &middot; Generative Models &middot; Sampling</span>
   <span class="pres-desc">Reformulated score distillation sampling through the lens of Wasserstein gradient flows, yielding improved generation quality and theoretical grounding.</span>
   <div><a href="/assets/pdfs/mtech-thesis.pdf" class="pres-link">thesis</a> <span style="opacity:0.4;">|</span> <a href="/assets/pdfs/mtech-slides.pdf" class="pres-link">slides</a> <span style="opacity:0.4;">|</span> <a href="https://your-project-url.com" class="pres-link">project</a></div>
 </div>
@@ -44,7 +44,7 @@ author_profile: true
 
 <div class="pres-item">
   <span class="pres-title">Minimum Variance Sparse Portfolio Construction</span>
-  <span class="pres-meta">Presentation &middot; Mathematical Finance</span>
+  <span class="pres-meta">Presentation &middot; Optimization &middot; Mathematical Finance</span>
   <span class="pres-desc">Overview of sparse optimization methods for constructing minimum variance portfolios under cardinality constraints, with empirical comparisons on equity data.</span>
   <div><a href="/assets/pdfs/portfolio.pdf" class="pres-link">slides</a></div>
 </div>
