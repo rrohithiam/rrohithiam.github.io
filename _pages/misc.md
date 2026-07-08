@@ -7,6 +7,7 @@ author_profile: true
 
 {% include base_path %}
 
+## Thesis
 ---
 
 <style>
@@ -31,6 +32,9 @@ author_profile: true
   <span class="pres-desc">Reformulated score distillation sampling through the lens of Wasserstein gradient flows, yielding improved generation quality and theoretical grounding.</span>
   <div><a href="/files/masters_thesis.pdf" class="pres-link" target="_blank" rel="noopener noreferrer">thesis</a> <span style="opacity: 0.4; margin: 0 2px;">|</span> <a href="/files/ddp.pdf" class="pres-link" target="_blank" rel="noopener noreferrer">slides</a> <span style="opacity: 0.4; margin: 0 2px;">|</span> <a href="https://rrohithiam.github.io/projects/pfd/" class="pres-link" target="_blank" rel="noopener noreferrer">project</a></div>
 </div>
+
+## Presentations
+---
 
 <div class="pres-item">
   <span class="pres-title">Bounded Envy-Free Cake Cutting Protocols</span>
