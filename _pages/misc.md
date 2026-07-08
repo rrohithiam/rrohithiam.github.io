@@ -38,21 +38,21 @@ author_profile: true
 
 <div class="pres-item">
   <span class="pres-title">Bounded Envy-Free Cake Cutting Protocols</span>
-  <span class="pres-meta">Presentation</span>
+  <span class="pres-meta">Game Theory</span>
   <span class="pres-desc">Survey of protocols for fair division with bounded envy, covering Robertson–Webb query complexity and recent constructive results.</span>
   <div><a href="/files/cake_cutting.pdf" class="pres-link" target="_blank" rel="noopener noreferrer">slides</a></div>
 </div>
 
 <div class="pres-item">
   <span class="pres-title">Markov Chain Mixing Time on Uniform Graph Colorings</span>
-  <span class="pres-meta">Presentation</span>
+  <span class="pres-meta">MCMC</span>
   <span class="pres-desc">Presentation on bounding the mixing time of Glauber dynamics for the uniform distribution over proper colorings of bounded-degree graphs.</span>
   <div><a href="/files/mixting_time.pdf" class="pres-link" target="_blank" rel="noopener noreferrer">slides</a></div>
 </div>
 
 <div class="pres-item">
   <span class="pres-title">Minimum Variance Sparse Portfolio Construction</span>
-  <span class="pres-meta">Presentation</span>
+  <span class="pres-meta">Optimization</span>
   <span class="pres-desc">Overview of sparse optimization methods for constructing minimum variance portfolios under cardinality constraints, with empirical comparisons on equity data.</span>
   <div><a href="/files/portfolio_selection.pdf" class="pres-link" target="_blank" rel="noopener noreferrer">slides</a></div>
 </div>
