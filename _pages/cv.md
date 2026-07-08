@@ -9,14 +9,14 @@ redirect_from:
 
 {% include base_path %}
 
----
-
 Education
 ---
 * Indian Institute of Technology Madras, Chennai (2021–2026)
   * B.Tech. (Honours) in Engineering Physics & Inter-Disciplinary M.Tech. in Data Science
 * DAV BHEL School, Ranipet (2018–2021)
   * Higher Secondary & Secondary Education
+
+---
 
 Work experience
 ---
