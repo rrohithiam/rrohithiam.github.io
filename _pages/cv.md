@@ -9,7 +9,7 @@ redirect_from:
 
 {% include base_path %}
 
-Education
+### Education
 ---
 * Indian Institute of Technology Madras, Chennai (2021–2026)
   * B.Tech. (Honours) in Engineering Physics & Inter-Disciplinary M.Tech. in Data Science
@@ -18,7 +18,7 @@ Education
 
 ---
 
-Work experience
+### Work experience
 ---
 * Data Science Intern (Summer 2024)
   * National Payments Corporation of India, Hyderabad
