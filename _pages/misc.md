@@ -22,7 +22,7 @@ author_profile: true
 <div class="pres-item">
   <span class="pres-title">Adaptive Parallel Tempering for Job Shop Scheduling</span>
   <span class="pres-meta">B.Tech Thesis</span>
-  <span class="pres-desc">Developed an adaptive variant of parallel tempering for solving job shop scheduling problems, with dynamic temperature schedules tuned during the search.</span>
+  <span class="pres-desc">Developed a parallel tempering solver for job-shop scheduling using adaptive temperature tuning to escape local minima and efficient neighbor search for fast incremental updates</span>
   <div><a href="/files/bachelors_thesis.pdf" class="pres-link" target="_blank" rel="noopener noreferrer">thesis</a> <span style="opacity: 0.4; margin: 0 2px;">|</span> <a href="/files/btp.pdf" class="pres-link" target="_blank" rel="noopener noreferrer">slides</a></div>
 </div>
 
