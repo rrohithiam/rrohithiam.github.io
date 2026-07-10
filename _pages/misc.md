@@ -22,7 +22,7 @@ author_profile: true
 <div class="pres-item">
   <span class="pres-title">Adaptive Parallel Tempering for Job Shop Scheduling</span>
   <span class="pres-meta">B.Tech Thesis</span>
-  <span class="pres-desc">Developed a parallel tempering solver for job-shop scheduling using adaptive temperature tuning to escape local minima and efficient neighbor search for fast incremental updates</span>
+  <span class="pres-desc">Developed a parallel tempering solver for scheduling problems using adaptive temperature tuning and efficient neighbor search</span>
   <div><a href="/files/bachelors_thesis.pdf" class="pres-link" target="_blank" rel="noopener noreferrer">thesis</a> <span style="opacity: 0.4; margin: 0 2px;">|</span> <a href="/files/btp.pdf" class="pres-link" target="_blank" rel="noopener noreferrer">slides</a></div>
 </div>
 
@@ -39,7 +39,7 @@ author_profile: true
 <div class="pres-item">
   <span class="pres-title">Bounded Envy-Free Cake Cutting Protocols</span>
   <span class="pres-meta">Game Theory</span>
-  <span class="pres-desc">Explored algorithmic fair division through envy-free cake-cutting protocols for allocating heterogeneous resources among multiple agents.</span>
+  <span class="pres-desc">Presentation on envy-free cake-cutting protocols for allocating heterogeneous resources among multiple agents.</span>
   <div><a href="/files/cake_cutting.pdf" class="pres-link" target="_blank" rel="noopener noreferrer">slides</a></div>
 </div>
 
