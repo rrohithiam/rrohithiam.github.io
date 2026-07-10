@@ -39,7 +39,7 @@ author_profile: true
 <div class="pres-item">
   <span class="pres-title">Bounded Envy-Free Cake Cutting Protocols</span>
   <span class="pres-meta">Game Theory</span>
-  <span class="pres-desc">Survey of protocols for fair division with bounded envy, covering Robertson–Webb query complexity and recent constructive results.</span>
+  <span class="pres-desc">Explored algorithmic fair division through envy-free cake-cutting protocols for allocating heterogeneous resources among multiple agents.</span>
   <div><a href="/files/cake_cutting.pdf" class="pres-link" target="_blank" rel="noopener noreferrer">slides</a></div>
 </div>
 
