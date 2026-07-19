@@ -47,5 +47,5 @@ author_profile: true
   <span class="pres-title">Markov Chain Mixing Time on Uniform Graph Colorings</span>
   <span class="pres-meta">MCMC</span>
   <span class="pres-desc">Presentation on bounding the mixing time of Glauber dynamics for the uniform distribution over proper colorings of graphs.</span>
-  <div><a href="/files/mixting_time.pdf" class="pres-link" target="_blank" rel="noopener noreferrer">slides</a></div>
+  <div><a href="/files/mixing_time.pdf" class="pres-link" target="_blank" rel="noopener noreferrer">slides</a></div>
 </div>
