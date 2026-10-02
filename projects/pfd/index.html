@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="Probability-Flow Distillation: Exact Wasserstein Gradient Flow for High-Fidelity 3D Generation.">
-  <meta name="keywords" content="Probability-Flow Distillation, PFD, 3D Generation, Score Distillation, Wasserstein, NeRF, text-to-3D">
+        content="Probability-Flow Distillation: Distribution Matching in Parameter Space.">
+  <meta name="keywords" content="Probability-Flow Distillation, PFD, Score Distillation, SDS, SDI, VSD, Distribution Matching, PF-ODE, text-to-3D">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Probability-Flow Distillation</title>
 
@@ -86,10 +86,6 @@
       margin: 0;
     }
 
-    .idea-num {
-      color: #3273dc;
-    }
-
     .video-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -113,12 +109,114 @@
       margin-top: 4px;
     }
 
+    .results-table {
+      margin: 1rem auto;
+      font-size: 14.5px;
+    }
+
+    .results-table td, .results-table th {
+      text-align: center !important;
+      padding: 4px 14px !important;
+    }
+
+    .results-table tr.ours td {
+      background: #f5f8ff;
+      font-weight: 600;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
     @media (max-width: 600px) {
       .video-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
+  
+    .qa {
+      margin-bottom: 2.5rem;
+    }
+
+    .qa .question {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #1d3f7a;
+      border-left: 4px solid #3273dc;
+      padding-left: 14px;
+      margin-bottom: 1rem;
+      line-height: 1.35;
+    }
+
+
+
+    .result-box {
+      background: #f7f7f9;
+      border: 1px solid #e3e3ea;
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin: 1.2rem 0;
+    }
+
+    .result-box .result-title {
+      font-weight: 700;
+      font-size: 14.5px;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    details.proof {
+      margin: 0.8rem 0 1.2rem;
+      font-size: 14.5px;
+      color: #444;
+    }
+
+    details.proof summary {
+      cursor: pointer;
+      color: #3273dc;
+      font-weight: 600;
+    }
+
+    details.proof summary:focus-visible {
+      outline: 2px solid #3273dc;
+      outline-offset: 2px;
+    }
+
+    details.proof > div {
+      border-left: 2px solid #e3e3ea;
+      padding: 8px 0 4px 14px;
+      margin-top: 8px;
+    }
+
+    .part-title {
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      margin: 0.5rem 0 2rem;
+    }
+
+    .katex-display {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 2px 0;
+    }
+
+    .method-viewer {
+      margin: 1.2rem 0 1.5rem;
+    }
+
+    .method-viewer img {
+      max-width: 100%;
+      border-radius: 6px;
+    }
+
+    .method-viewer .button:focus-visible {
+      outline: 2px solid #3273dc;
+      outline-offset: 2px;
+    }
   </style>
 </head>
 
@@ -148,7 +246,7 @@
           <div class="column has-text-centered">
 
             <h1 class="title is-1 publication-title">
-              Probability-Flow Distillation: Exact Wasserstein Gradient Flow for High-Fidelity 3D Generation
+              Probability-Flow Distillation: Distribution Matching in Parameter Space
             </h1>
 
             <div class="is-size-5 publication-authors">
@@ -199,35 +297,18 @@
 
   <hr class="section-divider">
 
+
   <section class="section">
     <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
+      <div class="columns is-centered">
         <div class="column is-four-fifths">
-          <h2 class="title is-3">Abstract</h2>
-
           <div class="tldr-box">
             <span class="tldr-label">TL;DR</span>
             <p style="margin:0; font-size:15px; line-height:1.6; color:#333;">
-              SDS-style methods enable sampling in parameter space via optimization but suffer from
-              mode collapse and biased gradients; we propose Probability-Flow Distillation (PFD),
-              inducing Wasserstein gradient flow for improved distribution matching.
-            </p>
-          </div>
-
-          <div class="content has-text-justified">
-            <p>
-              Score Distillation Sampling (SDS) and its variants have been widely used for text-to-3D
-              generation by distilling 2D image diffusion priors. However, the standard SDS objective
-              is prone to severe mode collapse, frequently yielding over-smoothed and over-saturated results.
-              Although recent advancements, such as Score Distillation via Inversion (SDI), mitigate these
-              artifacts and produce visually sharper models, they ultimately fail to faithfully capture the
-              full target distribution. In this work, we show that the bottleneck limiting the sampling capacity 
-              of SDI stems from its reliance on the posterior mean estimator, which is mathematically equivalent 
-              to a single-step Euler approximation of the deterministic reverse DDIM trajectory. To address this, 
-              we propose <strong>Probability-Flow Distillation (PFD)</strong>, replacing this approximation with exact
-              integration of the PF-ODE. We establish that PFD corresponds exactly to a Wasserstein gradient
-              flow, inducing principled distribution-matching dynamics. PFD synthesizes 3D assets with
-              fine-grained, high-fidelity details and achieves improved quality compared to existing methods.
+              Score distillation methods optimize parameters so that the data they produce looks like it came from a diffusion
+              model. We ask which distribution each method actually converges to. SDS collapses onto the modes, SDI
+              contracts the target, and a small change motivated by the PF-ODE, <strong>Probability-Flow Distillation
+              (PFD)</strong>, matches it.
             </p>
           </div>
         </div>
@@ -238,47 +319,43 @@
   <hr class="section-divider">
 
   <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Key Observation</h2>
-      <div class="content has-text-justified">
+    <div class="container is-max-desktop content has-text-justified">
+      <p class="part-title">Part I: The problem</p>
+
+      <div class="qa">
+        <p class="question">What are we trying to sample?</p>
         <p>
-          The starting point of PFD is a simple observation about the DDIM
-          posterior mean estimator. Given a noisy sample \( \mathbf{x}_t \), the standard
-          estimate of the clean sample is
+          We are after not data, but the parameters that produce it. Let \( \bm{x}_0 = \bm{g}(\bm{\theta}, \bm{\omega}) \), where \( \bm{g} \) is
+          differentiable in \( \bm{\theta} \) and \( \bm{\omega} \sim \xi \) is the randomness of the
+          forward model. We want a distribution \( \pi \) over \( \bm{\theta} \) whose pushforward matches the
+          data distribution \( p_0 \) learned by a pretrained diffusion model:
         </p>
-
-        <div class="has-text-centered" style="margin:1.5rem 0;">
-        \[
-        \mathbb{E}\!\left[\mathbf{x}_0 \mid \mathbf{x}_t\right]
-        = \tilde{\mathbf{x}}_t - \sigma_t \epsilon_\phi(\mathbf{x}_t,t) \qquad \tilde{\mathbf{x}}_t = \frac{\mathbf{x}_t}{\sqrt{\alpha_t}}.\] 
-        </div>
-
+        \[ \pi^\star \in \arg\min_{\pi}\; D_{\mathrm{KL}}\!\left(\bm{g}_{\#}(\pi \otimes \xi)\,\big\|\,p_0\right). \]
         <p>
-          We show that this estimator is mathematically equivalent to a single explicit Euler discretization step of the DDIM Probability-Flow ODE, evaluated at
-          \( (\mathbf{x}_t,t) \) and integrated along the reverse-time trajectory from \( t \) to \( 0 \) with step size \( \Delta \sigma = -\sigma_t \).
+          In text-to-3D, \( \bm{\theta} \) is a 3D representation, \( \bm{g} \) a renderer and
+          \( \bm{\omega} \) the camera pose; 3D data is scarce, but image diffusion models are not. The same
+          template covers audio synthesizer parameters and one-step generators, where
+          \( \bm{g}(\bm{\theta},\bm{\omega}) = G_{\bm{\theta}}(\bm{\omega}) \).
         </p>
+      </div>
 
+      <div class="qa">
+        <p class="question">How do existing methods do this?</p>
         <p>
-          This perspective reveals a common ground in the gradient estimator used by both SDS and SDI. While SDI replaces the noisy forward perturbation 
-          used in SDS with DDIM inversion, both methods still rely on exactly the same single-step Euler approximation when traversing the reverse trajectory. 
-          Once viewed through this lens, a natural question arises: if the posterior mean is merely a single Euler step of the PF-ODE, why stop at one step? 
-          Why not integrate the PF-ODE itself exactly (at least in theory)? This is precisely the idea behind PFD, as illustrated below.
-           But why should this lead to a better algorithm? Continue reading to find out!
+          Existing methods all move particles along the same kind of update and differ only in one term. They reduce, directly or approximately, to one of three: Score Distillation Sampling
+          (SDS), Score Distillation via Inversion (SDI) and Variational Score Distillation (VSD). Each evolves
+          parameters as
         </p>
-
-        <div class="has-text-centered" style="margin:2rem 0;">
-          <img src="./static/images/fig_gradients.png"
-               style="width:100%; border-radius:6px;"
-               alt="Comparison of SDS, SDI, and PFD gradient estimators">
-
-          <p style="font-size:13px; color:#555; margin-top:0.75rem;">
-            <strong>Figure 1.</strong>
-            (a) <strong>SDS</strong>: noisy sample via Gaussian perturbation; reverse via single Euler step (posterior mean).
-            (b) <strong>SDI</strong>: forward via DDIM inversion; reverse still a single Euler step.
-            (c) <strong>PFD (Ours)</strong>: both forward and reverse via exact PF-ODE integration,
-            eliminating the posterior mean approximation entirely.
-          </p>
-        </div>
+        \[ \frac{\mathrm{d}\bm{\theta}}{\mathrm{d}\tau} = -\,\mathbb{E}_{t,\bm{\omega},\bm{\epsilon}}\!\left[\left(\frac{\partial \bm{x}_0}{\partial \bm{\theta}}\right)^{\!\top}\bm{\Delta}(\bm{x}_0, t, \bm{\epsilon})\right], \]
+        <p>
+          where \( \bm{\Delta} \) is the method's gradient estimator and \( \tau \) is optimization time, distinct
+          from the diffusion time \( t \sim \mathcal{U}[0,1] \). Viewing this as dynamics on a set of particles
+          \( \{\bm{\theta}_i\}_i \), the induced data distribution is
+          \( q_{0,\tau} = \bm{g}_{\#}(\pi_\tau \otimes \xi) \). VSD was derived so that \( q_{0,\tau} \to p_0 \).
+          For SDS and SDI, the question was never asked. From here on, take \( \bm{g} \) to be the identity, so
+          \( q_{0,\tau} = \pi_\tau \). We work in the variance-exploding form
+          \( \bm{x}_t = \bm{x}_0 + \sigma_t\bm{\epsilon} \), to which the DDIM-ODE reduces.
+        </p>
       </div>
     </div>
   </section>
@@ -286,154 +363,456 @@
   <hr class="section-divider">
 
   <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Probability-Flow Distillation</h2>
+    <div class="container is-max-desktop content has-text-justified">
+      <p class="part-title">Part II: Where existing methods end up</p>
 
-      <div class="content has-text-justified">
+      <div class="qa">
+        <p class="question">SDS collapses onto the modes of \( p_0 \)</p>
         <p>
-          Beyond being a natural extension to SDI, PFD has a deeper theoretical interpretation.
-          Our main theoretical result shows that the PFD gradient <strong>exactly matches the
-          Wasserstein gradient</strong> of a time-averaged KL divergence functional between
-          the generated distribution and the target diffusion prior:
+          Every particle climbs to a peak on its own. SDS minimizes the denoising loss over \( \bm{\theta} \) but omits the Jacobian of the noise predictor.
+          With \( w(t) = \sigma_t \), its estimator is
+        </p>
+        \[ \bm{\Delta} = \bm{x}_0 - \hat{\bm{x}}_0(\bm{x}_t), \qquad \hat{\bm{x}}_0(\bm{x}_t) = \bm{x}_t - \sigma_t\bm{\epsilon}_\phi(\bm{x}_t,t) = \mathbb{E}_p[\bm{x}_0 \mid \bm{x}_t], \]
+        <p>
+          the difference between a particle and Tweedie's posterior mean. Taking the expectation over
+          \( \bm{\epsilon} \), each particle evolves as
+        </p>
+        \[ \frac{\mathrm{d}\bm{x}_0}{\mathrm{d}\tau} = \mathbb{E}_{t,\bm{\epsilon}}\!\left[\sigma_t^2\,\nabla_{\bm{x}}\log p_t(\bm{x}_0 + \sigma_t\bm{\epsilon})\right]. \]
+        <p>
+          Nothing on the right-hand side depends on \( q_{0,\tau} \), so nothing maintains entropy. Particles in different
+          basins converge to different local maxima, and \( p_0 \) itself is not even a fixed point.
+        </p>
+        <details class="proof">
+          <summary>Why is \( p_0 \) not a fixed point?</summary>
+          <div>
+            Suppose \( q_{0,\tau} = p_0 \) with \( \mathrm{Cov}(\bm{x}_0) \succ 0 \). By the law of total covariance,
+            \[ \mathrm{Cov}(\hat{\bm{x}}_0) = \mathrm{Cov}(\bm{x}_0) - \mathbb{E}\!\left[\mathrm{Cov}(\bm{x}_0 \mid \bm{x}_t)\right]. \]
+            If \( \bm{v}^\top\mathbb{E}[\mathrm{Cov}(\bm{x}_0\mid\bm{x}_t)]\bm{v} = 0 \) for some
+            \( \bm{v}\neq 0 \), then \( \bm{v}^\top\bm{x}_0 \) is a function of \( \bm{x}_t \); since
+            \( \bm{x}_t \) has full support given \( \bm{x}_0 \), that function is constant, contradicting
+            \( \mathrm{Cov}(\bm{x}_0)\succ 0 \). Hence \( \mathrm{Cov}(\hat{\bm{x}}_0) \prec \mathrm{Cov}(\bm{x}_0) \)
+            while \( \mathbb{E}[\hat{\bm{x}}_0] = \mathbb{E}[\bm{x}_0] \): SDS pushes \( p_0 \) toward the same mean
+            with a strictly smaller covariance.
+          </div>
+        </details>
+        <div class="result-box">
+          <p class="result-title">Proposition 1 (Gaussian target)</p>
+          Let \( p_0 = \mathcal{N}(\bm{\mu}, \rho^2\bm{I}_d) \) and \( \sigma_t = t \). Then SDS is the linear ODE
+          \[ \frac{\mathrm{d}\bm{x}_0}{\mathrm{d}\tau} = -A(\rho)\,(\bm{x}_0 - \bm{\mu}), \qquad A(\rho) = \mathbb{E}_t\!\left[\frac{t^2}{\rho^2+t^2}\right] = 1 - \rho\arctan\frac{1}{\rho} > 0. \]
+          From \( \mathcal{N}(\bm{m}_0, \nu_0^2\bm{I}_d) \), the particles stay Gaussian with
+          \( \bm{m}_\tau = \bm{\mu} + e^{-A(\rho)\tau}(\bm{m}_0 - \bm{\mu}) \) and
+          \( \nu_\tau^2 = \nu_0^2 e^{-2A(\rho)\tau} \), so \( q_{0,\tau} \to \delta_{\bm{\mu}} \).
+        </div>
+      </div>
+
+      <div class="qa">
+        <p class="question">SDI avoids collapse. Does it reach \( p_0 \)?</p>
+        <p>
+          It does not: SDI converges to a contracted version of \( p_0 \), with the right mean but a strictly smaller spread. SDI keeps the same estimator but replaces the random \( \bm{\epsilon} \) with the noise implied by DDIM
+          inversion. Ideally, this maps \( \bm{x}_0 \) through the PF-ODE of the particle distribution itself, which
+          we call the <em>forward</em> PF-ODE, with flow map \( \bm{\Phi}^{q_\tau}_{0\to t} \):
+        </p>
+        \[ \frac{\mathrm{d}\bm{x}_0}{\mathrm{d}\tau} = \mathbb{E}_t\!\left[\hat{\bm{x}}_0\!\left(\bm{\Phi}^{q_\tau}_{0\to t}(\bm{x}_0)\right)\right] - \bm{x}_0. \]
+        <p>
+          DDIM inversion approximates this map by integrating \( \nabla_{\bm{x}}\log p_t(\cdot\mid\varnothing) \) in
+          place of \( \nabla_{\bm{x}}\log q_{t,\tau} \). Unlike SDS, the update now depends on \( q_{0,\tau} \), and that
+          dependence acts as an entropy term: the forward PF-ODE must add a fixed amount of variance, so the more
+          concentrated the particles are, the harder it pushes them apart. The posterior mean, however, still contracts.
+        </p>
+        <div class="result-box">
+          <p class="result-title">Proposition 2 (Gaussian target)</p>
+          With \( p_0 = \mathcal{N}(\bm{\mu}, \rho^2\bm{I}_d) \) and \( \sigma_t = t \), the particles stay
+          Gaussian, \( q_{0,\tau} = \mathcal{N}(\bm{m}_\tau, \nu_\tau^2\bm{I}_d) \), with
+          \[ \frac{\mathrm{d}\bm{m}_\tau}{\mathrm{d}\tau} = -A(\rho)\,(\bm{m}_\tau - \bm{\mu}), \qquad \frac{\mathrm{d}\nu_\tau}{\mathrm{d}\tau} = \big(B(\nu_\tau) - 1\big)\,\nu_\tau, \qquad B(\nu) = \frac{\rho^2}{\nu}\,\mathbb{E}_t\!\left[\frac{\sqrt{\nu^2+t^2}}{\rho^2+t^2}\right]. \]
+          \( B(\nu_\star) = 1 \) has a unique, globally attracting solution with \( \nu_\star < \rho \), so
+          \( q_{0,\tau} \to \mathcal{N}(\bm{\mu}, \nu_\star^2\bm{I}_d) \).
+        </div>
+        <details class="proof">
+          <summary>Why \( \nu_\star < \rho \)?</summary>
+          <div>
+            \( B \) is strictly decreasing on \( (0,\infty) \), diverges as \( \nu \to 0^+ \) and tends to
+            \( 1 - A(\rho) < 1 \) as \( \nu \to \infty \), so \( B(\nu_\star) = 1 \) has exactly one root. At
+            \( \nu = \rho \), \( B(\rho) = \rho\,\mathbb{E}_t[(\rho^2+t^2)^{-1/2}] < 1 \); since \( B \) is decreasing,
+            the root lies below \( \rho \).
+          </div>
+        </details>
+      </div>
+
+      <div class="qa">
+        <p class="question">Why does SDI need a negative CFG scale?</p>
+        <p>
+          Inversion runs the PF-ODE forward, so guidance has to tilt the other way. Classifier-free guidance replaces \( p_t(\cdot\mid c) \) with a tilted distribution
+          \( \tilde p_t(\bm{x}\mid c) \propto p_t(\bm{x}\mid c)\,\big(p_t(\bm{x}\mid c)/p_t(\bm{x}\mid\varnothing)\big)^{\gamma-1} \).
+          SDI inverts under the target prompt. Using the approximation from Q4,
+          \( \nabla\log p_t(\cdot\mid\varnothing) \approx \nabla\log q_{t,\tau} \), the guided score becomes
+        </p>
+        \[ \nabla_{\bm{x}}\log\tilde p_t(\bm{x}_t\mid c) \approx \nabla_{\bm{x}}\log\!\left[p_t(\bm{x}_t)\left(\frac{p_t(\bm{x}_t)}{q_{t,\tau}(\bm{x}_t)}\right)^{\gamma-1}\right], \]
+        <p>
+          which tilts a <em>reverse</em> trajectory from \( q_{t,\tau} \) toward \( p_t \). Inversion integrates the
+          <em>forward</em> PF-ODE, so \( p_t \) and \( q_{t,\tau} \) must swap roles:
+        </p>
+        \[ \bm{\epsilon}_\phi(\cdot,c) + \gamma\big(\bm{\epsilon}_\phi(\cdot,\varnothing) - \bm{\epsilon}_\phi(\cdot,c)\big) = \bm{\epsilon}_\phi(\cdot,\varnothing) + (1-\gamma)\big(\bm{\epsilon}_\phi(\cdot,c) - \bm{\epsilon}_\phi(\cdot,\varnothing)\big). \]
+        <p>
+          An effective scale \( \gamma > 1 \) is therefore a user-specified scale \( \gamma_{\mathrm{cfg}} = 1-\gamma < 0 \).
+          Image editing confirms it: inverting under the target prompt with a positive scale gives unstable edits, while
+          the negative scale restores stability.
         </p>
         <div class="has-text-centered" style="margin:1.5rem 0;">
-          \[ \mathbb{E}_t[\Delta_t] = \nabla_{\mathbf{x}} \frac{\delta \mathcal{F}[q_0]}{\delta q_0(\mathbf{x})}, \]
-        </div>
-        <p>
-          where \( \mathcal{F}[q_0] = \mathbb{E}_t[w(t) D_{\mathrm{KL}}(q_t \,\|\, p_t)] \). 
-          In other words, the particle dynamics induced by PFD follow a <em>gradient flow in
-          Wasserstein space</em>, with a global minimum at \( q_0 = p_0 \), i.e., when the
-          generated distribution matches the target distribution.
-        </p>
-        <p>
-          This perspective also helps explain an important empirical difference between SDS, SDI, and PFD. SDS is fundamentally mode-seeking, 
-          while SDI alleviates this behavior to some extent but still struggles to faithfully capture the full target distribution. 
-          In contrast, PFD performs distribution matching through its underlying Wasserstein gradient flow. The simple 2D experiment below 
-          provides a visual illustration of this behavior.
-        </p>
-      </div>
-
-
-      <div class="has-text-centered" style="margin: 1.5rem 0;">
-        <img src="./static/images/fig_particles.png"
-             style="width:69%; border-radius:6px;"
-             alt="2D particle evolution: SDS vs SDI vs PFD on concentric circles" />
-        <p style="font-size:13px; color:#555; margin-top:0.6rem;">
-          <strong>Figure 2.</strong> Particle evolution on a concentric circles target distribution
-          (columns: optimization steps \( \tau \) = 0, 50, 100, 150).
-          (a) <strong>SDS</strong> collapses to a single mode.
-          (b) <strong>SDI</strong> partially recovers the support but misses fine structure.
-          (c) <strong>PFD (Ours)</strong> faithfully reconstructs the full multi-modal distribution.
-        </p>
-      </div>
-      
-      <div style="background:#fff5f5; border-left:4px solid #e74c3c; border-radius:4px;
-                    padding:14px 18px; margin: 1.5rem 0;">
-          <span style="font-family:monospace; font-size:11px; font-weight:700;
-                       letter-spacing:0.1em; text-transform:uppercase; color:#c0392b;
-                       display:block; margin-bottom:6px;">Note</span>
-          <p style="margin:0; font-size:14.5px; line-height:1.6; color:#444;">
-            In this toy example, a secondary network is trained to learn the score of the current particle distribution
-             in order to solve the forward PF-ODE in both SDI and PFD. This differs slightly from the SDI algorithm as originally
-              described in their paper; we refer interested readers to our paper for a detailed discussion.
-          </p>
-      </div>
-
-    </div>
-  </section>
-
-  <hr class="section-divider">
-
-  <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Text-to-3D Generation</h2>
-
-      <div class="content has-text-justified">
-        <p>
-          We apply PFD to text-to-3D generation as a natural testbed for the algorithm. We would like to emphasize, 
-          however, that text-to-3D is not the primary contribution of this work. Rather, the main contribution 
-          lies in the theoretical insights, the unifying perspective on existing methods, the PFD algorithm itself, and the accompanying proof. 
-          We hope these ideas provide a foundation that the community can build upon. Text-to-3D serves as a compelling application domain, 
-          particularly since the line of work leading up to PFD has been primarily focused on text-to-3D generation.
-
-        </p>
-        <p>
-          To make the method tractable for 3D generation, we employ an approximation used implicitly in prior work. 
-          In particular, we use standard DDIM inversion as a surrogate for the forward PF-ODE, allowing us to operate 
-          in the single-particle regime. The rationale behind these approximations is discussed the paper. Despite these approximations, 
-          PFD achieves results competitive with VSD, the current state-of-the-art method, which requires LoRA fine-tuning 
-          of the diffusion model. PFD also compares favorably to CSD, which can be viewed as an approximation to VSD and relies on 
-          approximations similar to those we employ when adapting the general PFD framework to text-to-3D generation. Moreover, 
-          PFD consistently produces stronger results than SDS and SDI. A qualitative comparison is shown below.
-        </p>
-
-        <div class="has-text-centered">
-          <img src="./static/images/fig_comparison.png"
-              style="width:100%; border-radius:6px;"
-              alt="Qualitative comparison: SDS, SDI, VSD, CSD, PFD" />
+          <img src="./static/images/ddim_edit.png" style="width:75%; border-radius:6px;"
+               alt="Image editing under three inversion methods">
           <p style="font-size:13px; color:#555; margin-top:0.6rem;">
-            <strong>Figure 3.</strong> Qualitative comparison on text-to-3D generation.
-            Columns left to right: SDS, SDI, VSD, CSD, <strong>PFD (Ours)</strong>.
+            Inversion with a source prompt at \( +3.5 \) (top), the target prompt at \( +3.5 \) (middle), and the target
+            prompt at \( -3.5 \) (bottom), each followed by DDIM sampling under the target prompt.
           </p>
         </div>
+      </div>
+    </div>
+  </section>
 
-        <div style="background:#fffbf0; border-left:4px solid #f5a623; border-radius:4px;
-                    padding:14px 18px; margin: 1.5rem 0;">
-          <span style="font-family:monospace; font-size:11px; font-weight:700;
-                       letter-spacing:0.1em; text-transform:uppercase; color:#c47d00;
-                       display:block; margin-bottom:6px;">Looking Ahead</span>
-          <p style="margin:0; font-size:14.5px; line-height:1.6; color:#444;">
-            The text-to-3D implementation presented here is deliberately minimal. Many design choices 
-            and avenues for improvement &mdash; including the ODE solver, representation architecture, multi-view 
-            consistency mechanisms, and the multi-particle setting &mdash; remain largely unexplored. Consequently, 
-            the current implementation still suffers from issues such as the Janus problem (See <em>"A 3D model of an adorable 
-            cottage with a thatched roof."</em> example below), unintended scene expansions (See <em>"lionfish."</em> example below), 
-            and floaters (See <em>"A DSLR photograph of a beautifully decorated cupcake."</em> example below). 
-            We strongly encourage the community to build upon this!
+  <hr class="section-divider">
+
+  <section class="section">
+    <div class="container is-max-desktop content has-text-justified">
+      <p class="part-title">Part III: Fixing it</p>
+
+      <div class="qa">
+        <p class="question">What is the posterior mean, really?</p>
+        <p>
+          It is one Euler step of the reverse PF-ODE, from noise straight to data. In terms of the noise level, the PF-ODE reads \( \mathrm{d}\bm{x}/\mathrm{d}\sigma = \bm{\epsilon}_\phi(\bm{x}, t(\sigma)) \).
+          A single explicit Euler step from \( \sigma_t \) to \( 0 \) gives
+        </p>
+        \[ \bm{x}_t + (0 - \sigma_t)\,\bm{\epsilon}_\phi(\bm{x}_t, t) = \bm{x}_t - \sigma_t\bm{\epsilon}_\phi(\bm{x}_t, t) = \hat{\bm{x}}_0(\bm{x}_t). \]
+        <p>
+          So SDS and SDI differ only in how they reach \( \bm{x}_t \) (Gaussian noise versus the forward PF-ODE), and
+          both return with the same one-step approximation.
+        </p>
+        <div class="has-text-centered" style="margin:1.5rem 0;">
+          <img src="./static/images/grad.png" style="width:100%; border-radius:6px;"
+               alt="SDS, SDI and dual-bridge estimators">
+          <p style="font-size:13px; color:#555; margin-top:0.6rem;">
+            (a) SDS: Gaussian perturbation, then the posterior mean. (b) SDI: forward PF-ODE, then the posterior mean.
+            (c) Dual bridge: forward and reverse PF-ODEs.
           </p>
         </div>
       </div>
 
-      <h3 class="title is-4" style="margin-top:0.5rem;">360° Results</h3>
-      <div class="video-grid">
-        <div class="video-item">
-          <video autoplay muted loop playsinline controls>
-            <source src="./static/videos/bunny.mp4" type="video/mp4">
-          </video>
-          <p>"A baby bunny sitting on a stack of pancakes."</p>
+      <div class="qa">
+        <p class="question">Why stop at one step?</p>
+        <p>
+          We don't have to. A full reverse solve makes \( p_0 \) a fixed point. Replacing the posterior mean with the reverse flow map \( \bm{\Phi}^{p}_{t\to 0} \) gives a dual-bridge estimator,</p>
+        \[ \bm{\Delta}(\bm{x}_0, t) = \bm{x}_0 - \bm{\Phi}^{p}_{t\to 0}\!\left(\bm{\Phi}^{q_\tau}_{0\to t}(\bm{x}_0)\right). \]
+        <p>
+          When \( q_{0,\tau} = p_0 \), the reverse flow inverts the forward one and \( \bm{\Delta} \) vanishes for
+          every particle. At \( t = 1 \), this is exactly the Dual Diffusion Implicit Bridge (DDIB) from the particle
+          distribution to the target.
+        </p>
+        <div class="result-box">
+          <p class="result-title">Theorem 4</p>
+          With \( \bm{x}_s = \bm{\Phi}^{q_\tau}_{0\to s}(\bm{x}_0) \) and \( g_s \) the diffusion coefficient,
+          \[ \mathbb{E}_t[\bm{\Delta}(\bm{x}_0, t)] = \int_0^1 \tfrac{1}{2}(1-s)\,g_s^2\,\frac{\partial\bm{\Phi}^{p}_{s\to 0}}{\partial\bm{x}}(\bm{x}_s)\left(\nabla_{\bm{x}}\log q_{s,\tau}(\bm{x}_s) - \nabla_{\bm{x}}\log p_s(\bm{x}_s)\right)\mathrm{d}s. \]
         </div>
-        <div class="video-item">
-          <video autoplay muted loop playsinline controls>
-            <source src="./static/videos/cactus.mp4" type="video/mp4">
-          </video>
-          <p>"A small saguaro cactus planted in a clay pot."</p>
+        <details class="proof">
+          <summary>Proof sketch</summary>
+          <div>
+            Differentiate \( \bm{\Delta}(\bm{x}_0,s) = \bm{x}_0 - \bm{\Phi}^{p}_{s\to0}(\bm{x}_s) \)
+            in \( s \). The dependence through \( \bm{x}_s \) contributes the forward velocity; the dependence of the
+            flow map on its start time contributes, by the standard identity
+            \( \partial_s\bm{\Phi}_{s\to s'}(\bm{x}) = -\tfrac{\partial\bm{\Phi}_{s\to s'}}{\partial\bm{x}}\,\bm{F}(\bm{x},s) \),
+            minus the reverse velocity. The drifts cancel, leaving
+            \( \tfrac12 g_s^2\,\tfrac{\partial\bm{\Phi}^p_{s\to0}}{\partial\bm{x}}(\nabla\log q_{s,\tau} - \nabla\log p_s) \).
+            Integrate from \( 0 \) to \( t \), then swap the order of integration over \( t\sim\mathcal{U}[0,1] \) to get the
+            weight \( 1-s \).
+          </div>
+        </details>
+        <p>The catch: every step needs two concatenated PF-ODE solves, which is \( \mathcal{O}(N^2) \) network evaluations on \( N \) quadrature nodes.</p>
+      </div>
+
+      <div class="qa">
+        <p class="question">Can we skip the second ODE?</p>
+        <p>
+          Yes. Drop the Jacobian, and only the forward PF-ODE is left. That is PFD. Without \( \partial\bm{\Phi}^{p}_{s\to0}/\partial\bm{x} \), the gradient in Theorem 4 needs only the
+          forward trajectory. Probability-Flow Distillation evolves particles as
+        </p>
+        \[ \frac{\mathrm{d}\bm{x}_0}{\mathrm{d}\tau} = \int_0^1 w(t)\left(\nabla_{\bm{x}}\log p_t(\bm{x}_t) - \nabla_{\bm{x}}\log q_{t,\tau}(\bm{x}_t)\right)\mathrm{d}t, \qquad \bm{x}_t = \bm{\Phi}^{q_\tau}_{0\to t}(\bm{x}_0), \]
+        <p>
+          with \( w(t) = \tfrac12(1-t)\,g_t^2 \), though the results hold for any \( w(t) > 0 \). The particle score
+          \( \nabla\log q_{t,\tau} \) comes from an auxiliary model trained online, and the integral is evaluated by
+          quadrature along one forward solve: \( \mathcal{O}(N) \) evaluations per step, like SDI and VSD, and no Monte
+          Carlo variance from sampling \( t \).
+        </p>
+      </div>
+
+      <div class="qa">
+        <p class="question">Isn't that just VSD?</p>
+        <p>
+          Not quite: PFD shares the integrand of VSD but uses a different coupling, and the coupling makes it faster. VSD integrates the same score difference, but at \( \bm{x}_t = \bm{x}_0 + \sigma_t\bm{\epsilon} \),
+          a stochastic coupling. PFD's deterministic coupling makes its gradient deterministic up to
+          \( \bm{\omega} \). VSD is the steepest descent of a time-averaged KL objective; measured on the KL at
+          the data level instead, PFD wins.
+        </p>
+        <div class="result-box">
+          <p class="result-title">Theorem 5 (small-time regime)</p>
+          With \( \sigma_t = t \) restricted to \( [0,\eta] \) and a common \( q_{0,\tau} \) decaying at infinity,
+          \[ \left.\frac{\mathrm{d}D_{\mathrm{KL}}(q_{0,\tau}\|p_0)}{\mathrm{d}\tau}\right|_{\mathrm{VSD}} - \left.\frac{\mathrm{d}D_{\mathrm{KL}}(q_{0,\tau}\|p_0)}{\mathrm{d}\tau}\right|_{\mathrm{PFD}} = C_\eta\left(\mathbb{E}_{q_{0,\tau}}\!\left[\big\|\nabla^2\log p_0 - \nabla^2\log q_{0,\tau}\big\|_F^2\right] + \mathcal{O}(\eta^2)\right), \]
+          where \( C_\eta = \tfrac12\int_0^\eta w(t)\,t^2\,\mathrm{d}t > 0 \). PFD decreases the KL at least as fast as VSD for small \( \eta \).
         </div>
-        <div class="video-item">
-          <video autoplay muted loop playsinline controls>
-            <source src="./static/videos/cupcake.mp4" type="video/mp4">
-          </video>
-          <p>"A DSLR photograph of a beautifully decorated cupcake."</p>
+        <details class="proof">
+          <summary>Where does the gap come from?</summary>
+          <div>
+            For a smooth test function \( f \), averaging over the Gaussian coupling and following the forward flow differ at second order:
+            \[ \mathbb{E}_{\bm{\epsilon}}\big[f(\bm{x}_0 + t\bm{\epsilon})\big] - f\big(\bm{\Phi}^{q_\tau}_{0\to t}(\bm{x}_0)\big) = \tfrac{t^2}{2}\,\mathcal{L}f(\bm{x}_0) + \mathcal{O}(t^4), \qquad \mathcal{L}f = \Delta f + \langle\nabla\log q_{0,\tau}, \nabla f\rangle, \]
+            the generator of Langevin dynamics with invariant density \( q_{0,\tau} \). Applied to each component of
+            \( \nabla(\log p_0 - \log q_{0,\tau}) \) and paired with the KL gradient, integration by parts turns
+            \( -\mathbb{E}[f\,\mathcal{L}f] \) into the Dirichlet energy \( \mathbb{E}\|\nabla f\|^2 \), which gives the
+            non-negative Frobenius term.
+          </div>
+        </details>
+        <p>
+          The advantage is not confined to small \( \eta \). For isotropic Gaussian targets with \( \eta = 1 \), PFD, VSD and
+          the dual bridge (DB) all keep the Gaussian family and converge to \( p_0 \), as
+          \( \mathrm{d}\bm{m}_\tau/\mathrm{d}\tau = -A_M(\bm{m}_\tau - \bm{\mu}) \) and
+          \( \mathrm{d}\nu_\tau/\mathrm{d}\tau = (\rho^2 - \nu_\tau^2)\,B_M(\nu_\tau) \), with
+        </p>
+        \[ A_{\mathrm{PFD}} = A_{\mathrm{VSD}} > A_{\mathrm{DB}}, \qquad B_{\mathrm{PFD}} > B_{\mathrm{VSD}},\, B_{\mathrm{DB}}. \]
+        <p>
+          PFD is the fastest of the three. Dropping the Jacobian makes it converge faster than the dual bridge it
+          approximates.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section class="section">
+    <div class="container is-max-desktop content has-text-justified">
+      <p class="part-title">Part IV: Experiments</p>
+
+      <div class="qa">
+        <p class="question">Does the theory hold up in practice?</p>
+        <p>
+          Yes, on every target we tried. On a 1D Gaussian, Neal's 2D funnel and a 20D mixture of Gaussians, SDS collapses onto the modes, SDI converges
+          to a contracted target, and DB, VSD and PFD match it. The KL divergence decreases fastest for PFD, then VSD,
+          then DB.
+        </p>
+        <div class="has-text-centered" style="margin:1.5rem 0;">
+          <img src="./static/images/1d_gauss.png" style="width:100%; border-radius:6px;"
+               alt="1D Gaussian target results">
+          <p style="font-size:13px; color:#555; margin-top:0.6rem;">
+            1D Gaussian with \( 10^5 \) particles. (left) \( D_{\mathrm{KL}}(q_{0,\tau}\|p_0) \) over optimization time.
+            (middle) Final distributions; the vertical line marks the SDS point mass. (right) Single-particle gradient
+            magnitude: deterministic for PFD, noisy for VSD.
+          </p>
         </div>
-        <div class="video-item">
-          <video autoplay muted loop playsinline controls>
-            <source src="./static/videos/hamburger.mp4" type="video/mp4">
-          </video>
-          <p>"A DSLR photograph of a hamburger."</p>
-        </div>
-        <div class="video-item">
-          <video autoplay muted loop playsinline controls>
-            <source src="./static/videos/lionfish.mp4" type="video/mp4">
-          </video>
-          <p>"A lionfish."</p>
-        </div>
-        <div class="video-item">
-          <video autoplay muted loop playsinline controls>
-            <source src="./static/videos/cottage.mp4" type="video/mp4">
-          </video>
-          <p>"A 3D model of an adorable cottage with a thatched roof."</p>
+        <div class="has-text-centered" style="margin:1.5rem 0;">
+          <img src="./static/images/out_2x6.png" style="width:100%; border-radius:6px;"
+               alt="Funnel and mixture of Gaussians results">
+          <p style="font-size:13px; color:#555; margin-top:0.6rem;">
+            \( 2\cdot10^3 \) particles on the funnel (top) and the 20D mixture (bottom, projected onto two principal
+            components). Columns: ground truth, SDS, SDI, DB, VSD, PFD.
+          </p>
         </div>
       </div>
 
+      <div class="qa">
+        <p class="question">Does it scale to real images?</p>
+        <p>
+          Yes. On CelebA, PFD and VSD recover the spread of the data; SDS and SDI do not. We train a VE diffusion model on CelebA and use it as the prior for plain image generation,
+          \( \bm{g}(\bm{\theta}) = \bm{\theta} \). Each method optimizes particles initialized from
+          \( \mathcal{N}(\bm{0},\bm{I}) \); FID and CMMD are computed over 10k samples (4 seeds of 2.5k particles).
+        </p>
+        <div class="table-wrap">
+          <table class="table results-table">
+            <thead>
+              <tr><th></th><th>Method</th><th>FID &darr;</th><th>CMMD &darr;</th></tr>
+            </thead>
+            <tbody>
+              <tr><td rowspan="3" style="vertical-align:middle; color:#888;">Reference</td><td>Dataset (disjoint 10k)</td><td>2.89</td><td>&lt; 0.001</td></tr>
+              <tr><td>Euler (50 steps)</td><td>25.54</td><td>0.377</td></tr>
+              <tr><td>Heun (50 steps)</td><td>24.43</td><td>0.368</td></tr>
+              <tr><td rowspan="4" style="vertical-align:middle; color:#888;">Distillation</td><td>SDS</td><td>236.82</td><td>6.531</td></tr>
+              <tr><td>SDI</td><td>108.78</td><td>3.289</td></tr>
+              <tr><td>VSD</td><td>16.61</td><td>0.106</td></tr>
+              <tr class="ours"><td>PFD (Ours)</td><td>16.92</td><td>0.106</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="has-text-centered" style="font-size:13px; color:#555;">Image generation on CelebA.</p>
+
+        <p>
+          The samples show why. SDS sends every particle to the same mode, so its images are nearly identical. SDI's are
+          varied but smooth: contracting the spread of \( q_{0,\tau} \) suppresses exactly the high-frequency detail that
+          varies most across faces. Switch between methods below.
+        </p>
+
+        <div class="method-viewer" data-viewer>
+          <div class="buttons has-addons is-centered" role="group" aria-label="Choose a method">
+            <button class="button is-small" data-method="sds" aria-pressed="false">SDS</button>
+            <button class="button is-small" data-method="sdi" aria-pressed="false">SDI</button>
+            <button class="button is-small" data-method="vsd" aria-pressed="false">VSD</button>
+            <button class="button is-small is-link is-selected" data-method="pfd" aria-pressed="true">PFD (Ours)</button>
+          </div>
+          <div class="has-text-centered">
+            <img data-panel="sds" src="./static/images/sds_gen.png" alt="Uncurated CelebA samples from SDS" hidden>
+            <img data-panel="sdi" src="./static/images/sdi_gen.png" alt="Uncurated CelebA samples from SDI" hidden>
+            <img data-panel="vsd" src="./static/images/vsd_gen.png" alt="Uncurated CelebA samples from VSD" hidden>
+            <img data-panel="pfd" src="./static/images/pfd_gen.png" alt="Uncurated CelebA samples from PFD">
+            <p style="font-size:13px; color:#555; margin-top:0.6rem;">
+              Uncurated samples, \( \bm{x}_0 = \bm{\theta} \) for 100 of the 128 particles optimized per method.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa">
+        <p class="question">What if \( \bm{g} \) is not the identity?</p>
+        <p>
+          The target becomes whatever part of \( p_0 \) the range of \( \bm{g} \) can reach, and the same ordering holds. With a deterministic \( \bm{g} \), \( q_{0,\tau} = \bm{g}_{\#}\pi_\tau \), so matching \( p_0 \) means
+          spreading the particles until \( \bm{g}_{\#}\pi_\tau \) is as close to \( p_0 \) as the range of
+          \( \bm{g} \) allows. We test three forward models with the same CelebA prior.
+        </p>
+
+        <h3 class="title is-5" style="margin-top:1.5rem;">Symmetric generation</h3>
+        <p>
+          \( \bm{g}(\bm{\theta}) = [\bm{\theta}, \mathrm{flip}(\bm{\theta})] \): the particles
+          hold only the left half, mirrored about the vertical axis, so the target is the symmetric part of \( p_0 \).
+        </p>
+        <div class="has-text-centered" style="margin:1rem 0 1.5rem;">
+          <img src="./static/images/symm.png" style="width:80%; border-radius:6px;"
+               alt="Symmetric image generation for SDS, SDI, VSD, PFD">
+          <p style="font-size:13px; color:#555; margin-top:0.6rem;">
+            \( \bm{x}_0 = [\bm{\theta}, \mathrm{flip}(\bm{\theta})] \) for 25 of the 128 particles per method.
+          </p>
+        </div>
+
+        <h3 class="title is-5">Inpainting</h3>
+        <p>
+          \( \bm{g}(\bm{\theta}) = \bm{M}\odot\bm{\theta} + (\bm{1}-\bm{M})\odot\bm{x}^{\mathrm{obs}} \)
+          with a fixed binary mask \( \bm{M} \). The range of \( \bm{g} \) is the set of images that agree with
+          \( \bm{x}^{\mathrm{obs}} \) outside the mask, so the target is \( p_0 \) conditioned on the observed pixels.
+          The particles should cover the plausible completions rather than settle on one.
+        </p>
+        <div class="method-viewer" data-viewer>
+          <div class="buttons has-addons is-centered" role="group" aria-label="Choose a mask">
+            <button class="button is-small is-link is-selected" data-method="left" aria-pressed="true">Left half masked</button>
+            <button class="button is-small" data-method="top" aria-pressed="false">Top half masked</button>
+            <button class="button is-small" data-method="tri" aria-pressed="false">Upper-right triangle masked</button>
+          </div>
+          <div class="has-text-centered">
+            <img data-panel="left" src="./static/images/inpaint1.png" alt="Inpainting with the left half masked">
+            <img data-panel="top" src="./static/images/inpaint2.png" alt="Inpainting with the top half masked" hidden>
+            <img data-panel="tri" src="./static/images/inpaint3.png" alt="Inpainting with the upper-right triangle masked" hidden>
+            <p style="font-size:13px; color:#555; margin-top:0.6rem;">
+              Rows: SDS, SDI, VSD, PFD. The first column is the initialization, with noise in the masked region; the rest
+              are 8 uncurated particles of the 128 per method.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="title is-5" style="margin-top:1.5rem;">Vector graphics</h3>
+        <p>
+          \( \bm{g} \) is the differentiable rasterizer of diffvg, and \( \bm{\theta} \) holds the control
+          points, colors and widths of 256 open B&eacute;zier strokes. Here \( \bm{g} \) is far from the identity, and
+          its range is limited to what a set of strokes can draw.
+        </p>
+        <div class="has-text-centered" style="margin:1rem 0 0.5rem;">
+          <img src="./static/images/svg.png" style="width:80%; border-radius:6px;"
+               alt="Vector graphics generation for SDS, SDI, VSD, PFD">
+          <p style="font-size:13px; color:#555; margin-top:0.6rem;">
+            The rasterized render \( \bm{x}_0 = \bm{g}(\bm{\theta}) \) for 25 of the 128 particles per method.
+          </p>
+        </div>
+        <p>
+          Across all three tasks, SDS converges to near-identical outputs, SDI to varied but smooth ones, and VSD and PFD
+          to diverse, detailed ones.
+        </p>
+      </div>
+
+      <div class="qa">
+        <p class="question">And text-to-3D?</p>
+        <p>
+          PFD gives the highest-fidelity renders, with the best ImageReward score. With one 3D representation, \( \pi_\tau = \delta_{\bm{\theta}_\tau} \) and \( q_{0,\tau} \) is the
+          distribution of its renders over camera poses. Matching \( p_0 \) asks every view to look like a sample from the
+          view-conditioned prior, which shows up as finer texture and geometry. All methods share the same per-step cost.
+        </p>
+        <div class="table-wrap">
+          <table class="table results-table">
+            <thead>
+              <tr>
+                <th rowspan="2" style="vertical-align:middle;">Method</th>
+                <th colspan="3">CLIP R-precision &uarr;</th>
+                <th rowspan="2" style="vertical-align:middle;">ImageReward &uarr;</th>
+              </tr>
+              <tr><th>ViT-L/14</th><th>ViT-B/16</th><th>ViT-B/32</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>SDS</td><td>0.796</td><td>0.820</td><td>0.802</td><td>&minus;1.150</td></tr>
+              <tr><td>SDI</td><td>0.925</td><td>0.917</td><td>0.886</td><td>&minus;0.257</td></tr>
+              <tr><td>VSD</td><td>0.958</td><td>0.955</td><td>0.998</td><td>0.680</td></tr>
+              <tr class="ours"><td>PFD (Ours)</td><td>0.969</td><td>0.955</td><td>0.998</td><td>0.891</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="has-text-centered" style="font-size:13px; color:#555;">22 prompts, 120 rendered views per asset.</p>
+        <div class="has-text-centered" style="margin:1.5rem 0;">
+          <img src="./static/images/qual1_cropped.png" style="width:100%; border-radius:6px;"
+               alt="Text-to-3D qualitative comparison">
+          <p style="font-size:13px; color:#555; margin-top:0.6rem;">
+            Columns: SDS (oversaturated, oversmoothed), SDI (smooth), VSD, <strong>PFD (Ours)</strong>.
+          </p>
+        </div>
+
+        <h3 class="title is-5" style="margin-top:1rem;">360° results</h3>
+        <div class="video-grid">
+          <div class="video-item">
+            <video autoplay muted loop playsinline controls>
+              <source src="./static/videos/cupcake.mp4" type="video/mp4">
+            </video>
+            <p>"A DSLR photograph of a beautifully decorated cupcake with sparkling sugar."</p>
+          </div>
+          <div class="video-item">
+            <video autoplay muted loop playsinline controls>
+              <source src="./static/videos/bagel.mp4" type="video/mp4">
+            </video>
+            <p>"A bagel filled with cream cheese and lox."</p>
+          </div>
+          <div class="video-item">
+            <video autoplay muted loop playsinline controls>
+              <source src="./static/videos/crown.mp4" type="video/mp4">
+            </video>
+            <p>"An imperial state crown of England."</p>
+          </div>
+          <div class="video-item">
+            <video autoplay muted loop playsinline controls>
+              <source src="./static/videos/skull.mp4" type="video/mp4">
+            </video>
+            <p>"An elephant skull."</p>
+          </div>
+          <div class="video-item">
+            <video autoplay muted loop playsinline controls>
+              <source src="./static/videos/tudor.mp4" type="video/mp4">
+            </video>
+            <p>"A model of a Tudor-style house."</p>
+          </div>
+          <div class="video-item">
+            <video autoplay muted loop playsinline controls>
+              <source src="./static/videos/cauldron.mp4" type="video/mp4">
+            </video>
+            <p>"A cauldron full of gold coins."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa">
+        <p class="question">What is still open?</p>
+        <p>
+          Two things: general targets beyond the small-time regime, and many particles in 3D. PFD's advantage over VSD is proven for general targets only in the small-time regime; extending it is open. In
+          text-to-3D, a single representation limits us to one particle, so the results show fidelity rather than
+          diversity. The multi-particle setting, which would give diverse as well as high-fidelity assets, is the natural
+          next step. Global artifacts such as the Janus problem persist and are orthogonal to this work. We encourage the
+          community to build on this.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -443,8 +822,8 @@
     <div class="container is-max-desktop content">
       <h2 class="title">BibTeX</h2>
       <pre><code>@misc{rrohithpfd2026,
-  title         = {Probability-Flow Distillation: Exact Wasserstein Gradient
-                   Flow for High-Fidelity 3D Generation},
+  title         = {Probability-Flow Distillation: Distribution Matching
+                   in Parameter Space},
   author        = {Rohith Ramanan and A. N. Rajagopalan},
   year          = {2026},
   eprint        = {2605.09071},
@@ -462,6 +841,27 @@
     </p>
   </div>
 </footer>
+
+<script>
+  document.querySelectorAll("[data-viewer]").forEach(function (viewer) {
+    var buttons = viewer.querySelectorAll("button[data-method]");
+    var panels = viewer.querySelectorAll("[data-panel]");
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var key = btn.getAttribute("data-method");
+        buttons.forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle("is-link", on);
+          b.classList.toggle("is-selected", on);
+          b.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+        panels.forEach(function (p) {
+          p.hidden = p.getAttribute("data-panel") !== key;
+        });
+      });
+    });
+  });
+</script>
 
 </body>
 </html>
