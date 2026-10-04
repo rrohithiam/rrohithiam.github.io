@@ -303,12 +303,9 @@
       <div class="columns is-centered">
         <div class="column is-four-fifths">
           <div class="tldr-box">
-            <span class="tldr-label">TL;DR</span>
+            <span class="tldr-label">Abstract</span>
             <p style="margin:0; font-size:15px; line-height:1.6; color:#333;">
-              Score distillation methods optimize parameters so that the data they produce looks like it came from a diffusion
-              model. We ask which distribution each method actually converges to. SDS collapses onto the modes, SDI
-              contracts the target, and a small change motivated by the PF-ODE, <strong>Probability-Flow Distillation
-              (PFD)</strong>, matches it.
+              Score distillation methods use pretrained diffusion models as priors for optimizing parameters that are mapped to data by a differentiable forward model, most notably in text-to-3D generation. Yet the distribution they induce over those parameters is not well understood. Observing that existing distillation methods reduce to one of three---Score Distillation Sampling (SDS), Score Distillation via Inversion (SDI), and Variational Score Distillation (VSD)---we extend the particle variational inference view of VSD to the other two. We show that SDS collapses onto the modes of the target, while SDI converges to a contracted version of it, and explain why SDI needs a negative classifier-free guidance scale. Next, we observe that Tweedie's posterior mean equals a single Euler step of the probability-flow ODE (PF-ODE). Replacing this step in SDI with a full reverse solve makes the target a fixed point, but it requires solving two concatenated PF-ODEs. Dropping a Jacobian from the resulting gradient gives Probability-Flow Distillation (PFD), which requires solving only the forward PF-ODE. Experiments on synthetic targets, the CelebA dataset, and text-to-3D generation support our analysis and demonstrate the practical effectiveness of PFD.
             </p>
           </div>
         </div>
@@ -325,36 +322,34 @@
       <div class="qa">
         <p class="question">What are we trying to sample?</p>
         <p>
-          We are after not data, but the parameters that produce it. Let \( \bm{x}_0 = \bm{g}(\bm{\theta}, \bm{\omega}) \), where \( \bm{g} \) is
-          differentiable in \( \bm{\theta} \) and \( \bm{\omega} \sim \xi \) is the randomness of the
+          We are not after the data, but the parameters that produce it. Let \( \bm{x}_0 = \bm{g}(\bm{\theta}, \bm{\omega}) \), where \( \bm{g} \) is the forward model,
+          differentiable in \( \bm{\theta} \), and \( \bm{\omega} \sim \xi \) is the randomness of the
           forward model. We want a distribution \( \pi \) over \( \bm{\theta} \) whose pushforward matches the
           data distribution \( p_0 \) learned by a pretrained diffusion model:
         </p>
         \[ \pi^\star \in \arg\min_{\pi}\; D_{\mathrm{KL}}\!\left(\bm{g}_{\#}(\pi \otimes \xi)\,\big\|\,p_0\right). \]
         <p>
           In text-to-3D, \( \bm{\theta} \) is a 3D representation, \( \bm{g} \) a renderer and
-          \( \bm{\omega} \) the camera pose; 3D data is scarce, but image diffusion models are not. The same
-          template covers audio synthesizer parameters and one-step generators, where
-          \( \bm{g}(\bm{\theta},\bm{\omega}) = G_{\bm{\theta}}(\bm{\omega}) \).
+          \( \bm{\omega} \) the camera pose; in one-step generation,
+          \( \bm{g}(\bm{\theta},\bm{\omega}) = G_{\bm{\theta}}(\bm{\omega}) \) and \(\pi^\star = \delta_{\bm{\theta^\star}}\) such that \( (G_{\bm\theta^\star})_\#\xi = p_0 \).
         </p>
       </div>
 
       <div class="qa">
         <p class="question">How do existing methods do this?</p>
         <p>
-          Existing methods all move particles along the same kind of update and differ only in one term. They reduce, directly or approximately, to one of three: Score Distillation Sampling
+          They all move particles along the same kind of update and differ only in one term. They reduce, directly or approximately, to one of three: Score Distillation Sampling
           (SDS), Score Distillation via Inversion (SDI) and Variational Score Distillation (VSD). Each evolves
           parameters as
         </p>
         \[ \frac{\mathrm{d}\bm{\theta}}{\mathrm{d}\tau} = -\,\mathbb{E}_{t,\bm{\omega},\bm{\epsilon}}\!\left[\left(\frac{\partial \bm{x}_0}{\partial \bm{\theta}}\right)^{\!\top}\bm{\Delta}(\bm{x}_0, t, \bm{\epsilon})\right], \]
         <p>
-          where \( \bm{\Delta} \) is the method's gradient estimator and \( \tau \) is optimization time, distinct
-          from the diffusion time \( t \sim \mathcal{U}[0,1] \). Viewing this as dynamics on a set of particles
+          where \( \bm{\Delta} \) is the method's gradient estimator and \( \tau \) is optimization time. Viewing this as dynamics on a set of particles
           \( \{\bm{\theta}_i\}_i \), the induced data distribution is
           \( q_{0,\tau} = \bm{g}_{\#}(\pi_\tau \otimes \xi) \). VSD was derived so that \( q_{0,\tau} \to p_0 \).
           For SDS and SDI, the question was never asked. From here on, take \( \bm{g} \) to be the identity, so
-          \( q_{0,\tau} = \pi_\tau \). We work in the variance-exploding form
-          \( \bm{x}_t = \bm{x}_0 + \sigma_t\bm{\epsilon} \), to which the DDIM-ODE reduces.
+          \( q_{0,\tau} = \pi_\tau \) and work in the variance-exploding form
+          \( \bm{x}_t = \bm{x}_0 + \sigma_t\bm{\epsilon} \).
         </p>
       </div>
     </div>
@@ -367,10 +362,9 @@
       <p class="part-title">Part II: Where existing methods end up</p>
 
       <div class="qa">
-        <p class="question">SDS collapses onto the modes of \( p_0 \)</p>
+        <p class="question">In SDS \(q_{0,\tau}\) collapses onto the modes of \( p_0 \)</p>
         <p>
-          Every particle climbs to a peak on its own. SDS minimizes the denoising loss over \( \bm{\theta} \) but omits the Jacobian of the noise predictor.
-          With \( w(t) = \sigma_t \), its estimator is
+          SDS minimizes the denoising loss over \( \bm{\theta} \) but omits the Jacobian of the noise predictor. The gradient estimator is given by:
         </p>
         \[ \bm{\Delta} = \bm{x}_0 - \hat{\bm{x}}_0(\bm{x}_t), \qquad \hat{\bm{x}}_0(\bm{x}_t) = \bm{x}_t - \sigma_t\bm{\epsilon}_\phi(\bm{x}_t,t) = \mathbb{E}_p[\bm{x}_0 \mid \bm{x}_t], \]
         <p>
@@ -379,24 +373,22 @@
         </p>
         \[ \frac{\mathrm{d}\bm{x}_0}{\mathrm{d}\tau} = \mathbb{E}_{t,\bm{\epsilon}}\!\left[\sigma_t^2\,\nabla_{\bm{x}}\log p_t(\bm{x}_0 + \sigma_t\bm{\epsilon})\right]. \]
         <p>
-          Nothing on the right-hand side depends on \( q_{0,\tau} \), so nothing maintains entropy. Particles in different
-          basins converge to different local maxima, and \( p_0 \) itself is not even a fixed point.
+          Nothing on the right-hand side depends on \( q_{0,\tau} \) and the noise vanished under expectation, so nothing maintains entropy. Every particle climbs to a peak on its own with particles starting in different
+          basins converging to a different local maxima.
         </p>
         <details class="proof">
-          <summary>Why is \( p_0 \) not a fixed point?</summary>
+          <summary>Why \( q_{0,\tau} = p_0 \) can't be a fixed point?</summary>
           <div>
-            Suppose \( q_{0,\tau} = p_0 \) with \( \mathrm{Cov}(\bm{x}_0) \succ 0 \). By the law of total covariance,
+            Suppose \( q_{0,\tau} = p_0 \) with \( \mathrm{Cov}(\bm{x}_0) \succ 0 \) (non-degenerate data). By the law of total covariance,
             \[ \mathrm{Cov}(\hat{\bm{x}}_0) = \mathrm{Cov}(\bm{x}_0) - \mathbb{E}\!\left[\mathrm{Cov}(\bm{x}_0 \mid \bm{x}_t)\right]. \]
             If \( \bm{v}^\top\mathbb{E}[\mathrm{Cov}(\bm{x}_0\mid\bm{x}_t)]\bm{v} = 0 \) for some
             \( \bm{v}\neq 0 \), then \( \bm{v}^\top\bm{x}_0 \) is a function of \( \bm{x}_t \); since
-            \( \bm{x}_t \) has full support given \( \bm{x}_0 \), that function is constant, contradicting
-            \( \mathrm{Cov}(\bm{x}_0)\succ 0 \). Hence \( \mathrm{Cov}(\hat{\bm{x}}_0) \prec \mathrm{Cov}(\bm{x}_0) \)
-            while \( \mathbb{E}[\hat{\bm{x}}_0] = \mathbb{E}[\bm{x}_0] \): SDS pushes \( p_0 \) toward the same mean
-            with a strictly smaller covariance.
+            \( \bm{x}_t \) has full support given \( \bm{x}_0 \), that function is constant. This contradicts
+            \( \mathrm{Cov}(\bm{x}_0)\succ 0 \). Hence \( \mathrm{Cov}(\hat{\bm{x}}_0) \prec \mathrm{Cov}(\bm{x}_0) \). Thus at any fixed point, the particles have strictly less spread than the data.
           </div>
         </details>
         <div class="result-box">
-          <p class="result-title">Proposition 1 (Gaussian target)</p>
+          <p class="result-title">Proposition 1 (Isotropic Gaussian target)</p>
           Let \( p_0 = \mathcal{N}(\bm{\mu}, \rho^2\bm{I}_d) \) and \( \sigma_t = t \). Then SDS is the linear ODE
           \[ \frac{\mathrm{d}\bm{x}_0}{\mathrm{d}\tau} = -A(\rho)\,(\bm{x}_0 - \bm{\mu}), \qquad A(\rho) = \mathbb{E}_t\!\left[\frac{t^2}{\rho^2+t^2}\right] = 1 - \rho\arctan\frac{1}{\rho} > 0. \]
           From \( \mathcal{N}(\bm{m}_0, \nu_0^2\bm{I}_d) \), the particles stay Gaussian with
@@ -408,19 +400,19 @@
       <div class="qa">
         <p class="question">SDI avoids collapse. Does it reach \( p_0 \)?</p>
         <p>
-          It does not: SDI converges to a contracted version of \( p_0 \), with the right mean but a strictly smaller spread. SDI keeps the same estimator but replaces the random \( \bm{\epsilon} \) with the noise implied by DDIM
-          inversion. Ideally, this maps \( \bm{x}_0 \) through the PF-ODE of the particle distribution itself, which
-          we call the <em>forward</em> PF-ODE, with flow map \( \bm{\Phi}^{q_\tau}_{0\to t} \):
+          SDI keeps the same estimator but replaces the random \( \bm{\epsilon} \) with the noise implied by DDIM
+          inversion. We consider this to be an approximation of the forward PF-ODE, induced by \( \{q_{t,\tau}\}_t \) solved in the \(0\rightarrow t\) direction, which maps \( \bm{x}_0 \) to \( \bm{x}_t \). Writing its flow map as \( \bm{\Phi}^{q_\tau}_{0\to t} \)
+          the particle dynamics are given by:
         </p>
         \[ \frac{\mathrm{d}\bm{x}_0}{\mathrm{d}\tau} = \mathbb{E}_t\!\left[\hat{\bm{x}}_0\!\left(\bm{\Phi}^{q_\tau}_{0\to t}(\bm{x}_0)\right)\right] - \bm{x}_0. \]
         <p>
-          DDIM inversion approximates this map by integrating \( \nabla_{\bm{x}}\log p_t(\cdot\mid\varnothing) \) in
-          place of \( \nabla_{\bm{x}}\log q_{t,\tau} \). Unlike SDS, the update now depends on \( q_{0,\tau} \), and that
-          dependence acts as an entropy term: the forward PF-ODE must add a fixed amount of variance, so the more
-          concentrated the particles are, the harder it pushes them apart. The posterior mean, however, still contracts.
+          DDIM inversion approximates \( \bm{\Phi}^{q_\tau}_{0\to t} \) by integrating \( \nabla_{\bm{x}}\log p_t(\cdot\mid\varnothing) \) in
+          place of \( \nabla_{\bm{x}}\log q_{t,\tau} \), which in the text-to-3D setting can be argued as a decent approximation. Unlike SDS, the update now depends on \( q_{0,\tau} \), and that
+          dependence acts as an entropy term: the forward PF-ODE must add a variance fixed by the schedule while the variance it actually adds is proportional to the current variance, so the more
+          concentrated the particles are, the harder it pushes them apart. The posterior mean, however, still contracts, hence, the particles converge to a contracted version of the target.
         </p>
         <div class="result-box">
-          <p class="result-title">Proposition 2 (Gaussian target)</p>
+          <p class="result-title">Proposition 2 (Isotropic Gaussian target)</p>
           With \( p_0 = \mathcal{N}(\bm{\mu}, \rho^2\bm{I}_d) \) and \( \sigma_t = t \), the particles stay
           Gaussian, \( q_{0,\tau} = \mathcal{N}(\bm{m}_\tau, \nu_\tau^2\bm{I}_d) \), with
           \[ \frac{\mathrm{d}\bm{m}_\tau}{\mathrm{d}\tau} = -A(\rho)\,(\bm{m}_\tau - \bm{\mu}), \qquad \frac{\mathrm{d}\nu_\tau}{\mathrm{d}\tau} = \big(B(\nu_\tau) - 1\big)\,\nu_\tau, \qquad B(\nu) = \frac{\rho^2}{\nu}\,\mathbb{E}_t\!\left[\frac{\sqrt{\nu^2+t^2}}{\rho^2+t^2}\right]. \]
@@ -432,7 +424,7 @@
           <div>
             \( B \) is strictly decreasing on \( (0,\infty) \), diverges as \( \nu \to 0^+ \) and tends to
             \( 1 - A(\rho) < 1 \) as \( \nu \to \infty \), so \( B(\nu_\star) = 1 \) has exactly one root. At
-            \( \nu = \rho \), \( B(\rho) = \rho\,\mathbb{E}_t[(\rho^2+t^2)^{-1/2}] < 1 \); since \( B \) is decreasing,
+            \( \nu = \rho \), \( B(\rho) = \rho\,\mathbb{E}_t[(\rho^2+t^2)^{-1/2}] < 1 \). Since \( B \) is decreasing,
             the root lies below \( \rho \).
           </div>
         </details>
@@ -441,27 +433,27 @@
       <div class="qa">
         <p class="question">Why does SDI need a negative CFG scale?</p>
         <p>
-          Inversion runs the PF-ODE forward, so guidance has to tilt the other way. Classifier-free guidance replaces \( p_t(\cdot\mid c) \) with a tilted distribution
+          Classifier-free guidance replaces \( p_t(\cdot\mid c) \) with a tilted distribution
           \( \tilde p_t(\bm{x}\mid c) \propto p_t(\bm{x}\mid c)\,\big(p_t(\bm{x}\mid c)/p_t(\bm{x}\mid\varnothing)\big)^{\gamma-1} \).
-          SDI inverts under the target prompt. Using the approximation from Q4,
+          Since in text-to-3D setting there is no source prompt, SDI inverts under the target prompt itself. Using the approximation we introduced above,
           \( \nabla\log p_t(\cdot\mid\varnothing) \approx \nabla\log q_{t,\tau} \), the guided score becomes
         </p>
         \[ \nabla_{\bm{x}}\log\tilde p_t(\bm{x}_t\mid c) \approx \nabla_{\bm{x}}\log\!\left[p_t(\bm{x}_t)\left(\frac{p_t(\bm{x}_t)}{q_{t,\tau}(\bm{x}_t)}\right)^{\gamma-1}\right], \]
         <p>
-          which tilts a <em>reverse</em> trajectory from \( q_{t,\tau} \) toward \( p_t \). Inversion integrates the
-          <em>forward</em> PF-ODE, so \( p_t \) and \( q_{t,\tau} \) must swap roles:
+          which tilts the sampling trajectory (the PF-ODE induced by \(\{p_t\}_t\) solved in \(t\rightarrow0\) direction, which we call the reverse PF-ODE) from \( q_{t,\tau} \) toward \( p_t \). Inversion integrates the
+          forward PF-ODE, where the tilting must be reversed and hence \( p_t \) and \( q_{t,\tau} \) must swap roles:
         </p>
         \[ \bm{\epsilon}_\phi(\cdot,c) + \gamma\big(\bm{\epsilon}_\phi(\cdot,\varnothing) - \bm{\epsilon}_\phi(\cdot,c)\big) = \bm{\epsilon}_\phi(\cdot,\varnothing) + (1-\gamma)\big(\bm{\epsilon}_\phi(\cdot,c) - \bm{\epsilon}_\phi(\cdot,\varnothing)\big). \]
         <p>
-          An effective scale \( \gamma > 1 \) is therefore a user-specified scale \( \gamma_{\mathrm{cfg}} = 1-\gamma < 0 \).
-          Image editing confirms it: inverting under the target prompt with a positive scale gives unstable edits, while
+          The right hand side is the standard implementation of CFG with guidance \(1-\gamma\). Thus, an effective scale \( \gamma > 1 \) in inversion needs an user-specified scale \( \gamma_{\mathrm{cfg}} = 1-\gamma < 0 \).
+          The following experiment with image editing supports this. Inverting under the target prompt with a positive scale gives unstable edits, while
           the negative scale restores stability.
         </p>
         <div class="has-text-centered" style="margin:1.5rem 0;">
           <img src="./static/images/ddim_edit.png" style="width:75%; border-radius:6px;"
                alt="Image editing under three inversion methods">
           <p style="font-size:13px; color:#555; margin-top:0.6rem;">
-            Inversion with a source prompt at \( +3.5 \) (top), the target prompt at \( +3.5 \) (middle), and the target
+            DDIM Inversion with a source prompt at \( +3.5 \) (top), the target prompt at \( +3.5 \) (middle), and the target
             prompt at \( -3.5 \) (bottom), each followed by DDIM sampling under the target prompt.
           </p>
         </div>
@@ -473,7 +465,7 @@
 
   <section class="section">
     <div class="container is-max-desktop content has-text-justified">
-      <p class="part-title">Part III: Fixing it</p>
+      <p class="part-title">Part III: Fixing the bias</p>
 
       <div class="qa">
         <p class="question">What is the posterior mean, really?</p>
@@ -503,7 +495,7 @@
         \[ \bm{\Delta}(\bm{x}_0, t) = \bm{x}_0 - \bm{\Phi}^{p}_{t\to 0}\!\left(\bm{\Phi}^{q_\tau}_{0\to t}(\bm{x}_0)\right). \]
         <p>
           When \( q_{0,\tau} = p_0 \), the reverse flow inverts the forward one and \( \bm{\Delta} \) vanishes for
-          every particle. At \( t = 1 \), this is exactly the Dual Diffusion Implicit Bridge (DDIB) from the particle
+          every particle. At \( t = 1 \), this is exactly the Dual Diffusion Implicit Bridge from the particle
           distribution to the target.
         </p>
         <div class="result-box">
@@ -537,7 +529,7 @@
         <p>
           with \( w(t) = \tfrac12(1-t)\,g_t^2 \), though the results hold for any \( w(t) > 0 \). The particle score
           \( \nabla\log q_{t,\tau} \) comes from an auxiliary model trained online, and the integral is evaluated by
-          quadrature along one forward solve: \( \mathcal{O}(N) \) evaluations per step, like SDI and VSD, and no Monte
+          quadrature along one forward solve. \( \mathcal{O}(N) \) evaluations per step, like SDI and VSD, and no Monte
           Carlo variance from sampling \( t \).
         </p>
       </div>
@@ -545,21 +537,21 @@
       <div class="qa">
         <p class="question">Isn't that just VSD?</p>
         <p>
-          Not quite: PFD shares the integrand of VSD but uses a different coupling, and the coupling makes it faster. VSD integrates the same score difference, but at \( \bm{x}_t = \bm{x}_0 + \sigma_t\bm{\epsilon} \),
+          Not quite. PFD shares the integrand of VSD but uses a different coupling. VSD integrates the same score difference, but at \( \bm{x}_t = \bm{x}_0 + \sigma_t\bm{\epsilon} \),
           a stochastic coupling. PFD's deterministic coupling makes its gradient deterministic up to
-          \( \bm{\omega} \). VSD is the steepest descent of a time-averaged KL objective; measured on the KL at
-          the data level instead, PFD wins.
+          \( \bm{\omega} \). VSD is the steepest descent of a time-averaged KL objective. But, if we focus on the KL at
+          the data level instead, PFD wins (atleast in the small-time regime).
         </p>
         <div class="result-box">
           <p class="result-title">Theorem 5 (small-time regime)</p>
-          With \( \sigma_t = t \) restricted to \( [0,\eta] \) and a common \( q_{0,\tau} \) decaying at infinity,
+          With \( \sigma_t = t \) restricted to \( [0,\eta] \) the following hold for an update from common \( q_{0,\tau} \),
           \[ \left.\frac{\mathrm{d}D_{\mathrm{KL}}(q_{0,\tau}\|p_0)}{\mathrm{d}\tau}\right|_{\mathrm{VSD}} - \left.\frac{\mathrm{d}D_{\mathrm{KL}}(q_{0,\tau}\|p_0)}{\mathrm{d}\tau}\right|_{\mathrm{PFD}} = C_\eta\left(\mathbb{E}_{q_{0,\tau}}\!\left[\big\|\nabla^2\log p_0 - \nabla^2\log q_{0,\tau}\big\|_F^2\right] + \mathcal{O}(\eta^2)\right), \]
           where \( C_\eta = \tfrac12\int_0^\eta w(t)\,t^2\,\mathrm{d}t > 0 \). PFD decreases the KL at least as fast as VSD for small \( \eta \).
         </div>
         <details class="proof">
           <summary>Where does the gap come from?</summary>
           <div>
-            For a smooth test function \( f \), averaging over the Gaussian coupling and following the forward flow differ at second order:
+            For a sufficiently smooth test function \( f \), averaging over the Gaussian coupling and following the forward flow differ at second order:
             \[ \mathbb{E}_{\bm{\epsilon}}\big[f(\bm{x}_0 + t\bm{\epsilon})\big] - f\big(\bm{\Phi}^{q_\tau}_{0\to t}(\bm{x}_0)\big) = \tfrac{t^2}{2}\,\mathcal{L}f(\bm{x}_0) + \mathcal{O}(t^4), \qquad \mathcal{L}f = \Delta f + \langle\nabla\log q_{0,\tau}, \nabla f\rangle, \]
             the generator of Langevin dynamics with invariant density \( q_{0,\tau} \). Applied to each component of
             \( \nabla(\log p_0 - \log q_{0,\tau}) \) and paired with the KL gradient, integration by parts turns
@@ -568,15 +560,14 @@
           </div>
         </details>
         <p>
-          The advantage is not confined to small \( \eta \). For isotropic Gaussian targets with \( \eta = 1 \), PFD, VSD and
+          But the advantage is not confined to small \( \eta \). For isotropic Gaussian targets with \( \eta = 1 \), PFD, VSD and
           the dual bridge (DB) all keep the Gaussian family and converge to \( p_0 \), as
           \( \mathrm{d}\bm{m}_\tau/\mathrm{d}\tau = -A_M(\bm{m}_\tau - \bm{\mu}) \) and
           \( \mathrm{d}\nu_\tau/\mathrm{d}\tau = (\rho^2 - \nu_\tau^2)\,B_M(\nu_\tau) \), with
         </p>
         \[ A_{\mathrm{PFD}} = A_{\mathrm{VSD}} > A_{\mathrm{DB}}, \qquad B_{\mathrm{PFD}} > B_{\mathrm{VSD}},\, B_{\mathrm{DB}}. \]
         <p>
-          PFD is the fastest of the three. Dropping the Jacobian makes it converge faster than the dual bridge it
-          approximates.
+          PFD is the fastest of the three. Suprisingly, dropping the Jacobian makes it converge faster than the dual bridge!
         </p>
       </div>
     </div>
@@ -591,9 +582,9 @@
       <div class="qa">
         <p class="question">Does the theory hold up in practice?</p>
         <p>
-          Yes, on every target we tried. On a 1D Gaussian, Neal's 2D funnel and a 20D mixture of Gaussians, SDS collapses onto the modes, SDI converges
-          to a contracted target, and DB, VSD and PFD match it. The KL divergence decreases fastest for PFD, then VSD,
-          then DB.
+          Yes, on every target we tried. The following shows the result for a 1D Gaussian, Neal's 2D funnel and a 20D mixture of Gaussians, where in each of them, SDS collapses onto the modes, SDI converges
+          to a contracted target, and DB, VSD and PFD match it. For the Gaussian, the KL divergence decreases fastest for PFD, then VSD,
+          then DB, supporting the propositions.
         </p>
         <div class="has-text-centered" style="margin:1.5rem 0;">
           <img src="./static/images/1d_gauss.png" style="width:100%; border-radius:6px;"
@@ -804,13 +795,14 @@
       </div>
 
       <div class="qa">
-        <p class="question">What is still open?</p>
+        <p class="question">What's next?</p>
         <p>
-          Two things: general targets beyond the small-time regime, and many particles in 3D. PFD's advantage over VSD is proven for general targets only in the small-time regime; extending it is open. In
-          text-to-3D, a single representation limits us to one particle, so the results show fidelity rather than
-          diversity. The multi-particle setting, which would give diverse as well as high-fidelity assets, is the natural
-          next step. Global artifacts such as the Janus problem persist and are orthogonal to this work. We encourage the
-          community to build on this.
+          PFD's advantage over VSD is proven for general targets only in the small-time regime; extending it beyond
+          that regime remains open. In text-to-3D, threestudio supports only a single representation, which limits us
+          to one particle, so the results show fidelity rather than diversity. The multi-particle setting, which would
+          give diverse as well as high-fidelity assets, is the natural next step. Global artifacts such as the Janus
+          problem also persist, and strong multi-view priors may help alleviate them. We encourage the community to
+          build on this.
         </p>
       </div>
     </div>
