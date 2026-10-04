@@ -347,7 +347,7 @@
           where \( \bm{\Delta} \) is the method's gradient estimator and \( \tau \) is optimization time. Viewing this as dynamics on a set of particles
           \( \{\bm{\theta}_i\}_i \), the induced data distribution is
           \( q_{0,\tau} = \bm{g}_{\#}(\pi_\tau \otimes \xi) \). VSD was derived so that \( q_{0,\tau} \to p_0 \).
-          For SDS and SDI, the question was never asked. From here on, take \( \bm{g} \) to be the identity, so
+          For SDS and SDI, the question was never asked. From here on, we take \( \bm{g} \) to be the identity, so
           \( q_{0,\tau} = \pi_\tau \) and work in the variance-exploding form
           \( \bm{x}_t = \bm{x}_0 + \sigma_t\bm{\epsilon} \).
         </p>
@@ -362,7 +362,7 @@
       <p class="part-title">Part II: Where existing methods end up</p>
 
       <div class="qa">
-        <p class="question">In SDS \(q_{0,\tau}\) collapses onto the modes of \( p_0 \)</p>
+        <p class="question">In SDS, \(q_{0,\tau}\) collapses onto the modes of \( p_0 \)</p>
         <p>
           SDS minimizes the denoising loss over \( \bm{\theta} \) but omits the Jacobian of the noise predictor. The gradient estimator is given by:
         </p>
@@ -441,7 +441,7 @@
         \[ \nabla_{\bm{x}}\log\tilde p_t(\bm{x}_t\mid c) \approx \nabla_{\bm{x}}\log\!\left[p_t(\bm{x}_t)\left(\frac{p_t(\bm{x}_t)}{q_{t,\tau}(\bm{x}_t)}\right)^{\gamma-1}\right], \]
         <p>
           which tilts the sampling trajectory (the PF-ODE induced by \(\{p_t\}_t\) solved in \(t\rightarrow0\) direction, which we call the reverse PF-ODE) from \( q_{t,\tau} \) toward \( p_t \). Inversion integrates the
-          forward PF-ODE, where the tilting must be reversed and hence \( p_t \) and \( q_{t,\tau} \) must swap roles:
+          forward PF-ODE, thus the tilting must be reversed and hence \( p_t \) and \( q_{t,\tau} \) must swap roles, which when written in the noise-prediction form gives:
         </p>
         \[ \bm{\epsilon}_\phi(\cdot,c) + \gamma\big(\bm{\epsilon}_\phi(\cdot,\varnothing) - \bm{\epsilon}_\phi(\cdot,c)\big) = \bm{\epsilon}_\phi(\cdot,\varnothing) + (1-\gamma)\big(\bm{\epsilon}_\phi(\cdot,c) - \bm{\epsilon}_\phi(\cdot,\varnothing)\big). \]
         <p>
@@ -507,10 +507,10 @@
           <summary>Proof sketch</summary>
           <div>
             Differentiate \( \bm{\Delta}(\bm{x}_0,s) = \bm{x}_0 - \bm{\Phi}^{p}_{s\to0}(\bm{x}_s) \)
-            in \( s \). The dependence through \( \bm{x}_s \) contributes the forward velocity; the dependence of the
+            in \( s \). The dependence through \( \bm{x}_s \) contributes the Jacobian times the forward velocity term; the dependence of the
             flow map on its start time contributes, by the standard identity
-            \( \partial_s\bm{\Phi}_{s\to s'}(\bm{x}) = -\tfrac{\partial\bm{\Phi}_{s\to s'}}{\partial\bm{x}}\,\bm{F}(\bm{x},s) \),
-            minus the reverse velocity. The drifts cancel, leaving
+            \( \partial_s\bm{\Phi}_{s\to s'}(\bm{x}) = -\tfrac{\partial\bm{\Phi}_{s\to s'}}{\partial\bm{x}}\,\bm{F}(\bm{x},s) \), contributes minus the Joacbian times the reverse velocity term.
+             The drifts cancel, leaving
             \( \tfrac12 g_s^2\,\tfrac{\partial\bm{\Phi}^p_{s\to0}}{\partial\bm{x}}(\nabla\log q_{s,\tau} - \nabla\log p_s) \).
             Integrate from \( 0 \) to \( t \), then swap the order of integration over \( t\sim\mathcal{U}[0,1] \) to get the
             weight \( 1-s \).
