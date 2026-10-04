@@ -305,7 +305,7 @@
           <div class="tldr-box">
             <span class="tldr-label">Abstract</span>
             <p style="margin:0; font-size:15px; line-height:1.6; color:#333;">
-              Score distillation methods use pretrained diffusion models as priors for optimizing parameters that are mapped to data by a differentiable forward model, most notably in text-to-3D generation. Yet the distribution they induce over those parameters is not well understood. Observing that existing distillation methods reduce to one of three---Score Distillation Sampling (SDS), Score Distillation via Inversion (SDI), and Variational Score Distillation (VSD)---we extend the particle variational inference view of VSD to the other two. We show that SDS collapses onto the modes of the target, while SDI converges to a contracted version of it, and explain why SDI needs a negative classifier-free guidance scale. Next, we observe that Tweedie's posterior mean equals a single Euler step of the probability-flow ODE (PF-ODE). Replacing this step in SDI with a full reverse solve makes the target a fixed point, but it requires solving two concatenated PF-ODEs. Dropping a Jacobian from the resulting gradient gives Probability-Flow Distillation (PFD), which requires solving only the forward PF-ODE. Experiments on synthetic targets, the CelebA dataset, and text-to-3D generation support our analysis and demonstrate the practical effectiveness of PFD.
+              Score distillation methods use pretrained diffusion models as priors for optimizing parameters that are mapped to data by a differentiable forward model, most notably in text-to-3D generation. Yet the distribution they induce over those parameters is not well understood. Observing that existing distillation methods reduce to one of three—Score Distillation Sampling (SDS), Score Distillation via Inversion (SDI), and Variational Score Distillation (VSD)—we extend the particle variational inference view of VSD to the other two. We show that SDS collapses onto the modes of the target, while SDI converges to a contracted version of it, and explain why SDI needs a negative classifier-free guidance scale. Next, we observe that Tweedie's posterior mean equals a single Euler step of the probability-flow ODE (PF-ODE). Replacing this step in SDI with a full reverse solve makes the target a fixed point, but it requires solving two concatenated PF-ODEs. Dropping a Jacobian from the resulting gradient gives Probability-Flow Distillation (PFD), which requires solving only the forward PF-ODE. Experiments on synthetic targets, the CelebA dataset, and text-to-3D generation support our analysis and demonstrate the practical effectiveness of PFD.
             </p>
           </div>
         </div>
@@ -322,7 +322,7 @@
       <div class="qa">
         <p class="question">What are we trying to sample?</p>
         <p>
-          We are not after the data, but the parameters that produce it. Let \( \bm{x}_0 = \bm{g}(\bm{\theta}, \bm{\omega}) \), where \( \bm{g} \) is the forward model,
+          We are not after the data, but the parameters that produce it. Let \( \bm{x}_0 = \bm{g}(\bm{\theta}, \bm{\omega}) \), where \( \bm{g} \) is the forward model
           differentiable in \( \bm{\theta} \), and \( \bm{\omega} \sim \xi \) is the randomness of the
           forward model. We want a distribution \( \pi \) over \( \bm{\theta} \) whose pushforward matches the
           data distribution \( p_0 \) learned by a pretrained diffusion model:
