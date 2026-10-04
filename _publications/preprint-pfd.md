@@ -4,7 +4,7 @@ authors: "Rohith Ramanan, A. N. Rajagopalan"
 collection: publications
 category: preprints
 permalink: /publication/preprint-pfd
-date: 2026-05-09
+date: 2026-09-09
 venue: 'arXiv'
 paperurl: 'https://doi.org/10.48550/arXiv.2605.09071'
 project: 'https://rrohithiam.github.io/projects/pfd/'
