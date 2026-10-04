@@ -529,8 +529,7 @@
         <p>
           with \( w(t) = \tfrac12(1-t)\,g_t^2 \), though the results hold for any \( w(t) > 0 \). The particle score
           \( \nabla\log q_{t,\tau} \) comes from an auxiliary model trained online, and the integral is evaluated by
-          quadrature along one forward solve. \( \mathcal{O}(N) \) evaluations per step, like SDI and VSD, and no Monte
-          Carlo variance from sampling \( t \).
+          quadrature along one forward solve.
         </p>
       </div>
 
@@ -551,7 +550,7 @@
         <details class="proof">
           <summary>Where does the gap come from?</summary>
           <div>
-            For a sufficiently smooth test function \( f \), averaging over the Gaussian coupling and following the forward flow differ at second order:
+            For a sufficiently smooth test function \( f \), averaging over the Gaussian coupling and the forward flow differ at the second order:
             \[ \mathbb{E}_{\bm{\epsilon}}\big[f(\bm{x}_0 + t\bm{\epsilon})\big] - f\big(\bm{\Phi}^{q_\tau}_{0\to t}(\bm{x}_0)\big) = \tfrac{t^2}{2}\,\mathcal{L}f(\bm{x}_0) + \mathcal{O}(t^4), \qquad \mathcal{L}f = \Delta f + \langle\nabla\log q_{0,\tau}, \nabla f\rangle, \]
             the generator of Langevin dynamics with invariant density \( q_{0,\tau} \). Applied to each component of
             \( \nabla(\log p_0 - \log q_{0,\tau}) \) and paired with the KL gradient, integration by parts turns
@@ -665,7 +664,7 @@
 
         <h3 class="title is-5" style="margin-top:1.5rem;">Symmetric generation</h3>
         <p>
-          \( \bm{g}(\bm{\theta}) = [\bm{\theta}, \mathrm{flip}(\bm{\theta})] \): the particles
+          \( \bm{g}(\bm{\theta}) = [\bm{\theta}, \mathrm{flip}(\bm{\theta})] \), where the particles
           hold only the left half, mirrored about the vertical axis, so the target is the symmetric part of \( p_0 \).
         </p>
         <div class="has-text-centered" style="margin:1rem 0 1.5rem;">
@@ -753,7 +752,7 @@
           </p>
         </div>
 
-        <h3 class="title is-5" style="margin-top:1rem;">360° results</h3>
+        <h3 class="title is-5" style="margin-top:1rem;">360° results for PFD</h3>
         <div class="video-grid">
           <div class="video-item">
             <video autoplay muted loop playsinline controls>
@@ -799,8 +798,8 @@
         <p>
           PFD's advantage over VSD is proven for general targets only in the small-time regime; extending it beyond
           that regime remains open. In text-to-3D, threestudio supports only a single representation, which limits us
-          to one particle, so the results show fidelity rather than diversity. The multi-particle setting, which would
-          give diverse as well as high-fidelity assets, is the natural next step. Global artifacts such as the Janus
+          to one particle, so distribution matching show as fidelity rather than diversity. The multi-particle setting, which would
+          give diverse as well as high-fidelity assets, is the natural next implementation step. Global artifacts such as the Janus
           problem also persist, and strong multi-view priors may help alleviate them. We encourage the community to
           build on this.
         </p>
