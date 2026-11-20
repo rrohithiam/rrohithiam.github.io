@@ -357,3 +357,34 @@ a:hover { text-decoration-color: var(--text); }
 .chip:hover { border-color: var(--line-strong); color: var(--text); }
 .misc-list { padding-left: 18px; }
 @media (max-width: 640px) { .misc-list { padding-left: 12px; } }
+
+/* Ongoing timeline entry: hollow ring with a soft pulse */
+.tl-item.ongoing::before {
+  left: -22px;
+  top: 12px;
+  width: 10px;
+  height: 10px;
+  background: var(--bg);
+  border: 2px solid var(--text);
+  box-shadow: 0 0 0 2px var(--bg);
+}
+.tl-item.ongoing::after {
+  content: "";
+  position: absolute;
+  left: -22px;
+  top: 12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--muted);
+  box-sizing: border-box;
+  animation: tl-pulse 2.4s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes tl-pulse {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tl-item.ongoing::after { animation: none; display: none; }
+}

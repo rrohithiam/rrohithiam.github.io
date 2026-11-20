@@ -1,8 +1,10 @@
 # Timeline shown in the "CV" section of the home page, top to bottom.
 # Each entry: date, title (one line, or a list for several lines), org,
 # and optional links (label + url) shown after the org.
+# Add "ongoing: true" to draw the entry with a hollow, in-progress dot.
 
 - date: "2027–2031 (Expected)"
+  ongoing: true
   title: "Doctor of Philosophy, College of Computing and Data Science"
   org: "Nanyang Technological University, Singapore"
   links:

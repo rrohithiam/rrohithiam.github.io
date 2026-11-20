@@ -106,7 +106,7 @@
     <h2 class="section-title">Education &amp; Experience</h2>
     <ol class="timeline">
     {% for e in site.data.cv_short %}
-      <li class="tl-item">
+      <li class="tl-item{% if e.ongoing %} ongoing{% endif %}">
         <p class="tl-head">
           <span class="tl-date">{{ e.date }}</span>
         </p>
