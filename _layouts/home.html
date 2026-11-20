@@ -1,0 +1,166 @@
+<!doctype html>
+{%- assign name_parts = site.author.name | split: "<br>" -%}
+{%- assign display_name = name_parts[0] | strip -%}
+{%- assign native_name = name_parts[1] | strip -%}
+<html lang="{{ site.locale | slice: 0,2 }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ display_name }}</title>
+  <meta name="description" content="{{ display_name }} – {{ site.description }}">
+  <meta property="og:title" content="{{ display_name }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ site.url }}{{ site.baseurl }}/">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="canonical" href="{{ site.url }}{{ site.baseurl }}/">
+  <link rel="icon" type="image/svg+xml" href="{{ '/images/favicon.svg' | relative_url }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ '/images/favicon-32x32.png' | relative_url }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ '/images/apple-touch-icon-180x180.png' | relative_url }}">
+  <script>
+    // Apply the saved (or system) theme before first paint to avoid a flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("theme"); } catch (e) {}
+      if (t !== "dark" && t !== "light") {
+        t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+  <link rel="stylesheet" href="{{ '/assets/css/home.css' | relative_url }}">
+</head>
+<body>
+
+<nav class="nav" aria-label="Sections">
+  <div class="nav-inner">
+    <a class="brand" href="#top">{{ display_name }}</a>
+    <ul class="tabs">
+      <li><a href="#about" data-tab="about">About</a></li>
+      <li><a href="#publications" data-tab="publications">Publications</a></li>
+      <li><a href="#cv" data-tab="cv">CV</a></li>
+      <li><a href="#misc" data-tab="misc">Misc.</a></li>
+    </ul>
+    <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
+    </button>
+  </div>
+</nav>
+
+<main class="page" id="top">
+
+  <!-- About -->
+  <section id="about" class="section intro">
+    <div class="intro-head">
+      {% if site.author.avatar %}
+      <img class="avatar" src="{{ '/images/' | append: site.author.avatar | relative_url }}" alt="{{ display_name }}" width="104" height="104">
+      {% endif %}
+      <div>
+        <h1 class="name">{{ display_name }}</h1>
+        {% if native_name and native_name != "" %}<p class="native-name">{{ native_name }}</p>{% endif %}
+        <p class="affil">{{ site.author.employer }}{% if site.author.location %} · {{ site.author.location }}{% endif %}</p>
+        <p class="contact">
+          {%- capture sep %}<span class="sep" aria-hidden="true">/</span>{% endcapture -%}
+          {%- assign first = true -%}
+          {%- if site.author.email -%}<a href="mailto:{{ site.author.email }}">Email</a>{%- assign first = false -%}{%- endif -%}
+          {%- if site.author.googlescholar -%}{% unless first %}{{ sep }}{% endunless %}<a href="{{ site.author.googlescholar }}" target="_blank" rel="noopener">Google Scholar</a>{%- assign first = false -%}{%- endif -%}
+          {%- if site.author.linkedin -%}{% unless first %}{{ sep }}{% endunless %}<a href="https://www.linkedin.com/in/{{ site.author.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>{%- assign first = false -%}{%- endif -%}
+          {%- if site.author.github -%}{% unless first %}{{ sep }}{% endunless %}<a href="https://github.com/{{ site.author.github }}" target="_blank" rel="noopener">GitHub</a>{%- endif -%}
+        </p>
+      </div>
+    </div>
+    <div class="prose">{{ content }}</div>
+  </section>
+
+  <!-- Publications -->
+  <section id="publications" class="section">
+    <h2 class="section-title">Publications</h2>
+    {% capture bold_name %}<strong>{{ display_name }}</strong>{% endcapture %}
+    {% assign pubs = site.publications | sort: "date" | reverse %}
+    {% for p in pubs %}
+    {% assign bib_id = "bib-" | append: p.slug %}
+    <article class="item pub">
+      <div class="pub-body">
+        <h3 class="item-title">{{ p.title }}</h3>
+        {% if p.authors %}<p class="meta">{{ p.authors | replace: display_name, bold_name }}</p>{% endif %}
+        <p class="meta">{{ p.venue }} · {{ p.date | date: "%Y" }}</p>
+        {% if p.description %}<p class="desc">{{ p.description }}</p>{% endif %}
+        <p class="links">
+          {%- if p.paperurl -%}
+            <a href="{{ p.paperurl }}" target="_blank" rel="noopener">{% if p.category == "preprints" or p.paperurl contains "arxiv" or p.paperurl contains "arXiv" %}arXiv{% else %}paper{% endif %}</a>
+          {%- endif -%}
+          {%- if p.project -%}<span class="sep" aria-hidden="true">/</span><a href="{{ p.project | remove: site.url }}">project</a>{%- endif -%}
+          {%- if p.bibtex -%}<span class="sep" aria-hidden="true">/</span><button type="button" class="link-btn bib-toggle" aria-expanded="false" aria-controls="{{ bib_id }}">bibtex</button>{%- endif -%}
+        </p>
+        {% if p.bibtex %}
+        <div class="bibtex" id="{{ bib_id }}" hidden>
+          <button type="button" class="link-btn bib-copy">copy</button>
+          <pre>{{ p.bibtex | strip | escape }}</pre>
+        </div>
+        {% endif %}
+      </div>
+      {% if p.image and p.image != "" %}
+      <img class="pub-thumb" src="{{ '/images/' | append: p.image | relative_url }}" alt="" loading="lazy">
+      {% endif %}
+    </article>
+    {% endfor %}
+  </section>
+
+  <!-- CV -->
+  <section id="cv" class="section">
+    <h2 class="section-title">CV</h2>
+    {% assign cv = site.data.cv_short %}
+    {% for group in cv %}
+      <h3 class="group-title">{{ group[0] | capitalize }}</h3>
+      {% for e in group[1] %}
+      <div class="item row">
+        <div>
+          <h4 class="item-title">{{ e.title }}</h4>
+          <p class="meta">{{ e.org }}</p>
+          {% if e.details %}
+          <ul class="details">
+            {% for d in e.details %}<li>{{ d }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        <span class="date">{{ e.date }}</span>
+      </div>
+      {% endfor %}
+    {% endfor %}
+  </section>
+
+  <!-- Misc -->
+  <section id="misc" class="section">
+    <h2 class="section-title">Misc.</h2>
+    {% for group in site.data.misc %}
+      <h3 class="group-title">{{ group.heading }}</h3>
+      {% for it in group.items %}
+      <div class="item row">
+        <div>
+          <h4 class="item-title">{{ it.title }}</h4>
+          {% if it.desc %}<p class="desc">{{ it.desc }}</p>{% endif %}
+          {% if it.links %}
+          <p class="links">
+            {%- for l in it.links -%}
+              {%- unless forloop.first -%}<span class="sep" aria-hidden="true">/</span>{%- endunless -%}
+              <a href="{{ l.url }}"{% if l.url contains "://" or l.url contains ".pdf" %} target="_blank" rel="noopener"{% endif %}>{{ l.label }}</a>
+            {%- endfor -%}
+          </p>
+          {% endif %}
+        </div>
+        {% if it.type %}<span class="date">{{ it.type }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    {% endfor %}
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>© {{ site.time | date: "%Y" }} {{ display_name }}</p>
+</footer>
+
+<script src="{{ '/assets/js/home.js' | relative_url }}" defer></script>
+</body>
+</html>

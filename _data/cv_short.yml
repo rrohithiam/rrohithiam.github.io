@@ -1,0 +1,18 @@
+# Entries shown in the "CV" section of the home page.
+# Each entry: title, org, date, and an optional list of details.
+
+education:
+  - title: "B.Tech. (Honours) in Engineering Physics & Inter-Disciplinary M.Tech. in Data Science"
+    org: "Indian Institute of Technology Madras, Chennai"
+    date: "2021–2026"
+  - title: "Higher Secondary & Secondary Education"
+    org: "DAV BHEL School, Ranipet"
+    date: "2018–2021"
+
+experience:
+  - title: "Data Science Intern"
+    org: "National Payments Corporation of India, Hyderabad"
+    date: "Summer 2024"
+    details:
+      - "Research on Positive-Unlabeled (PU) learning for UPI fraud detection"
+      - "Also explored graph-based semi-supervised learning, including Laplacian and Poisson learning"

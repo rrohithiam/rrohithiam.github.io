@@ -1,0 +1,31 @@
+# Entries shown in the "Misc." section of the home page.
+# Each group has a heading and a list of items: title, type, desc, links (label + url).
+
+- heading: "Thesis"
+  items:
+    - title: "Adaptive Parallel Tempering for Job Shop Scheduling"
+      type: "B.Tech Thesis"
+      desc: "Developed a parallel tempering solver for scheduling problems using adaptive temperature tuning and efficient neighbor search"
+      links:
+        - { label: "thesis", url: "/files/bachelors_thesis.pdf" }
+        - { label: "slides", url: "/files/btp.pdf" }
+    - title: "Understanding Score Distillation as Distribution Matching"
+      type: "M.Tech Thesis"
+      desc: "Formulated an extension to score-distillation approaches with provable sampling properties, improving fidelity in 3D generation"
+      links:
+        - { label: "paper", url: "https://arxiv.org/pdf/2605.09071" }
+        - { label: "slides", url: "/files/ddp.pdf" }
+        - { label: "project", url: "/projects/pfd/" }
+
+- heading: "Presentations"
+  items:
+    - title: "Bounded Envy-Free Cake Cutting Protocols"
+      type: "Game Theory"
+      desc: "Presentation on envy-free cake-cutting protocols for allocating heterogeneous resources among multiple agents."
+      links:
+        - { label: "slides", url: "/files/cake_cutting.pdf" }
+    - title: "Markov Chain Mixing Time on Uniform Graph Colorings"
+      type: "MCMC"
+      desc: "Presentation on bounding the mixing time of Glauber dynamics for the uniform distribution over proper colorings of graphs."
+      links:
+        - { label: "slides", url: "/files/mixing_time.pdf" }
