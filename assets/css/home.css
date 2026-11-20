@@ -198,9 +198,7 @@ a:hover { text-decoration-color: var(--text); }
   line-height: 1.2;
 }
 .native-name { margin: 2px 0 0; color: var(--muted); font-size: 15px; }
-.affil { margin: 6px 0 0; color: var(--text-2); font-size: 15px; }
-.affil + .affil { margin-top: 0; }
-.contact { margin: 6px 0 0; font-size: 14px; }
+.contact { margin: 8px 0 0; font-size: 14px; }
 
 .prose { color: var(--text-2); }
 .prose p { margin: 0 0 12px; }
@@ -260,8 +258,9 @@ a:hover { text-decoration-color: var(--text); }
   font-weight: 650;
   font-variant-numeric: tabular-nums;
 }
-.tl-text { margin-top: 2px; font-size: 15px; color: var(--text-2); }
-.tl-title { color: var(--text); font-weight: 500; }
+.tl-head + .tl-title { margin-top: 2px !important; }
+.tl-title { font-size: 15px; color: var(--text); font-weight: 500; }
+.tl-text { font-size: 15px; color: var(--muted); }
 
 /* ---------- BibTeX ---------- */
 

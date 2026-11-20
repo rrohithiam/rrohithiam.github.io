@@ -59,8 +59,6 @@
       <div>
         <h1 class="name">{{ display_name }}</h1>
         {% if native_name and native_name != "" %}<p class="native-name">{{ native_name }}</p>{% endif %}
-        {% if site.author.bio and site.author.bio != "" %}<p class="affil">{{ site.author.bio }}</p>{% endif %}
-        <p class="affil">{{ site.author.employer }}{% if site.author.location %} · {{ site.author.location }}{% endif %}</p>
         <p class="contact">
           {%- capture sep %}<span class="sep" aria-hidden="true">/</span>{% endcapture -%}
           {%- assign first = true -%}
@@ -112,8 +110,15 @@
         <p class="tl-head">
           <span class="tl-date">{{ e.date }}</span>
         </p>
+        {%- if e.title.first -%}
+          {%- for t in e.title %}
+        <p class="tl-title">{{ t }}</p>
+          {%- endfor %}
+        {%- else %}
+        <p class="tl-title">{{ e.title }}</p>
+        {%- endif %}
         <p class="tl-text">
-          <span class="tl-title">{{ e.title }}</span>{% if e.org %}, {{ e.org }}{% endif %}
+          {{- e.org -}}
           {%- if e.links -%}
             <span class="dot" aria-hidden="true">·</span>
             {%- for l in e.links -%}
