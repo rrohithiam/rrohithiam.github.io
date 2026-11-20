@@ -59,6 +59,7 @@
       <div>
         <h1 class="name">{{ display_name }}</h1>
         {% if native_name and native_name != "" %}<p class="native-name">{{ native_name }}</p>{% endif %}
+        {% if site.author.bio and site.author.bio != "" %}<p class="affil">{{ site.author.bio }}</p>{% endif %}
         <p class="affil">{{ site.author.employer }}{% if site.author.location %} · {{ site.author.location }}{% endif %}</p>
         <p class="contact">
           {%- capture sep %}<span class="sep" aria-hidden="true">/</span>{% endcapture -%}
@@ -78,19 +79,17 @@
     <h2 class="section-title">Publications</h2>
     {% capture bold_name %}<strong>{{ display_name }}</strong>{% endcapture %}
     {% assign pubs = site.publications | sort: "date" | reverse %}
+    <ol class="entries">
     {% for p in pubs %}
-    {% assign bib_id = "bib-" | append: p.slug %}
-    <article class="item pub">
-      <div class="pub-body">
-        <h3 class="item-title">{{ p.title }}</h3>
-        {% if p.authors %}<p class="meta">{{ p.authors | replace: display_name, bold_name }}</p>{% endif %}
-        <p class="meta">{{ p.venue }} · {{ p.date | date: "%Y" }}</p>
-        {% if p.description %}<p class="desc">{{ p.description }}</p>{% endif %}
-        <p class="links">
-          {%- if p.paperurl -%}
-            <a href="{{ p.paperurl }}" target="_blank" rel="noopener">{% if p.category == "preprints" or p.paperurl contains "arxiv" or p.paperurl contains "arXiv" %}arXiv{% else %}paper{% endif %}</a>
-          {%- endif -%}
-          {%- if p.project -%}<span class="sep" aria-hidden="true">/</span><a href="{{ p.project | remove: site.url }}">project</a>{%- endif -%}
+      {% assign bib_id = "bib-" | append: p.slug %}
+      <li class="entry">
+        <p class="entry-title">{{ p.title }}</p>
+        {% if p.authors %}<p class="entry-sub">{{ p.authors | replace: display_name, bold_name }}</p>{% endif %}
+        <p class="entry-meta">
+          <span class="venue">{{ p.venue }}</span>, {{ p.date | date: "%Y" }}
+          {%- if p.paperurl or p.project or p.bibtex -%}<span class="dot" aria-hidden="true">·</span>{%- endif -%}
+          {%- if p.paperurl -%}<a href="{{ p.paperurl }}" target="_blank" rel="noopener">paper</a>{%- endif -%}
+          {%- if p.project -%}{% if p.paperurl %}<span class="sep" aria-hidden="true">/</span>{% endif %}<a href="{{ p.project | remove: site.url }}">project</a>{%- endif -%}
           {%- if p.bibtex -%}<span class="sep" aria-hidden="true">/</span><button type="button" class="link-btn bib-toggle" aria-expanded="false" aria-controls="{{ bib_id }}">bibtex</button>{%- endif -%}
         </p>
         {% if p.bibtex %}
@@ -99,35 +98,33 @@
           <pre>{{ p.bibtex | strip | escape }}</pre>
         </div>
         {% endif %}
-      </div>
-      {% if p.image and p.image != "" %}
-      <img class="pub-thumb" src="{{ '/images/' | append: p.image | relative_url }}" alt="" loading="lazy">
-      {% endif %}
-    </article>
+      </li>
     {% endfor %}
+    </ol>
   </section>
 
   <!-- CV -->
   <section id="cv" class="section">
-    <h2 class="section-title">CV</h2>
-    {% assign cv = site.data.cv_short %}
-    {% for group in cv %}
-      <h3 class="group-title">{{ group[0] | capitalize }}</h3>
-      {% for e in group[1] %}
-      <div class="item row">
-        <div>
-          <h4 class="item-title">{{ e.title }}</h4>
-          <p class="meta">{{ e.org }}</p>
-          {% if e.details %}
-          <ul class="details">
-            {% for d in e.details %}<li>{{ d }}</li>{% endfor %}
-          </ul>
-          {% endif %}
-        </div>
-        <span class="date">{{ e.date }}</span>
-      </div>
-      {% endfor %}
+    <h2 class="section-title">Education &amp; Experience</h2>
+    <ol class="timeline">
+    {% for e in site.data.cv_short %}
+      <li class="tl-item">
+        <p class="tl-head">
+          <span class="tl-date">{{ e.date }}</span>
+        </p>
+        <p class="tl-text">
+          <span class="tl-title">{{ e.title }}</span>{% if e.org %}, {{ e.org }}{% endif %}
+          {%- if e.links -%}
+            <span class="dot" aria-hidden="true">·</span>
+            {%- for l in e.links -%}
+              {%- unless forloop.first -%}<span class="sep" aria-hidden="true">/</span>{%- endunless -%}
+              <a href="{{ l.url }}"{% if l.url contains "://" or l.url contains ".pdf" %} target="_blank" rel="noopener"{% endif %}>{{ l.label }}</a>
+            {%- endfor -%}
+          {%- endif -%}
+        </p>
+      </li>
     {% endfor %}
+    </ol>
   </section>
 
   <!-- Misc -->
@@ -135,23 +132,24 @@
     <h2 class="section-title">Misc.</h2>
     {% for group in site.data.misc %}
       <h3 class="group-title">{{ group.heading }}</h3>
+      <ol class="entries misc-list">
       {% for it in group.items %}
-      <div class="item row">
-        <div>
-          <h4 class="item-title">{{ it.title }}</h4>
-          {% if it.desc %}<p class="desc">{{ it.desc }}</p>{% endif %}
-          {% if it.links %}
-          <p class="links">
-            {%- for l in it.links -%}
-              {%- unless forloop.first -%}<span class="sep" aria-hidden="true">/</span>{%- endunless -%}
-              <a href="{{ l.url }}"{% if l.url contains "://" or l.url contains ".pdf" %} target="_blank" rel="noopener"{% endif %}>{{ l.label }}</a>
+        {%- assign main = it.links | first -%}
+        <li class="entry">
+          <p class="entry-title">
+            {%- if main -%}
+              <a class="title-link" href="{{ main.url }}"{% if main.url contains "://" or main.url contains ".pdf" %} target="_blank" rel="noopener"{% endif %}>{{ it.title }}<span class="arrow" aria-hidden="true">↗</span></a>
+            {%- else -%}{{ it.title }}{%- endif -%}
+          </p>
+          <p class="entry-meta misc-meta">
+            {%- if it.type -%}<span>{{ it.type }}</span>{%- endif -%}
+            {%- for l in it.links offset: 1 -%}
+              <a class="chip" href="{{ l.url }}"{% if l.url contains "://" or l.url contains ".pdf" %} target="_blank" rel="noopener"{% endif %}>{{ l.label }}</a>
             {%- endfor -%}
           </p>
-          {% endif %}
-        </div>
-        {% if it.type %}<span class="date">{{ it.type }}</span>{% endif %}
-      </div>
+        </li>
       {% endfor %}
+      </ol>
     {% endfor %}
   </section>
 
